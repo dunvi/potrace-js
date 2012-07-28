@@ -1,8 +1,12 @@
-README. here
+README
 
-implementing Peter Selinger's potrace 
-(potrace.sourceforge.net/), a raster image to vector
-program, from C into javascript. Python may have
-existed at some point (see
-github.com/thomasballinger/potrace-python/).
+potrace-js
 
+A javascript implementation of Peter Selinger's raster to vector
+image converter potrace (http://potrace.sourceforge.net/),
+originally implemented in C.
+
+Python may have existed at some point (see
+https://github.com/thomasballinger/potrace-python/).
+
+hackerschool-2012
