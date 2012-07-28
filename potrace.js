@@ -5,9 +5,12 @@ var context = testImage.getContext('2d');
 
 testImage.addEventListener('click', function() {
     context.fillStyle = 'red';
-    context.fillRect(10, 10, 15, 15);
+    context.fillRect(2, 2, 5, 5);
+    
+    testData = new Bitmap(testImage, 0);
+    document.body.appendChild(testData.writeToCanvas());
+
 });
 
-var testData = context.getImageData(0,0,testImage.width,testImage.height);
 
 
