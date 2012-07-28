@@ -1,9 +1,13 @@
 console.log("where's the fire?");
 
-var example = document.getElementById('example');
-var context = example.getContext('2d');
+var testImage = document.getElementById('example');
+var context = testImage.getContext('2d');
 
-example.addEventListener('click', function() {
+testImage.addEventListener('click', function() {
     context.fillStyle = 'red';
-    context.fillRect(30, 30, 50, 50);
+    context.fillRect(10, 10, 15, 15);
 });
+
+var testData = context.getImageData(0,0,testImage.width,testImage.height);
+
+
