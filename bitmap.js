@@ -29,7 +29,7 @@ Bitmap = function (canvasElement, threshold) {
         //console.log(imageData[i*4+2]);
         //console.log(greyscale); // gave us NaN
         // 1 means it is black, 0 means it is white
-        this.image[i] = greyscale <= threshold ? 1 : 0;
+        this.image[i] = greyscale <= threshold ? 0 : 1;
     };
 };
 
@@ -37,15 +37,17 @@ Bitmap.prototype = {
 
     writeToCanvas: function() {
         var tempCanvas = document.createElement('canvas');
+        tempCanvas.width = this.width;
+        tempCanvas.height = this.height;
         var tempContext = tempCanvas.getContext('2d');
         var tempPixels = tempContext.createImageData(this.width, this.height);
         for (var i = 0; i < this._flatimagesize; i++) {
-            tempPixels.data[i*4]   = 255*this.image[i];
-            tempPixels.data[i*4+1] = 255*this.image[i];
-            tempPixels.data[i*4+2] = 255*this.image[i];
+            tempPixels.data[i*4]   = 255*(1-this.image[i]);
+            tempPixels.data[i*4+1] = 255*(1-this.image[i]);
+            tempPixels.data[i*4+2] = 255*(1-this.image[i]);
             tempPixels.data[i*4+3] = 255;
         };
-        tempContext.putImageData(tempPixels,this.width,this.height);
+        tempContext.putImageData(tempPixels,0,0);
         return tempCanvas;
     },
     
