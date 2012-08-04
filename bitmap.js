@@ -4,6 +4,9 @@
 // threshold = float (percentage at which assumed white)
 // threshold = 0 means color must be exactly white or it counts as black
 
+
+
+// set to self instead of this
 Bitmap = function (canvasElement, threshold) {
     this.init(canvasElement, threshold);
 };
@@ -88,13 +91,20 @@ Bitmap.prototype = {
 };
 
 
-//i just don't like this
+// normal inheritance just doesn't work
+// because you have to inherit from objects not classes
+
+// i just don't like this
+// it's not very clear is it
+// one way of doing it
+
 make_drafter = function (canvasElement, threshold) {
-    new_drafter = Object.create(Drafter);
+    new_drafter = Object.create(drafterPrototype);
     new_drafter.init(canvasElement, threshold);
     return new_drafter;
 };
 
+//probably a better way of doing it
 drafterPrototype = Object.create(Bitmap.prototype);
 
 drafterPrototype.findStart = function() {
