@@ -96,6 +96,25 @@ PathBuilder = function(image) {
 };
 */
 
+Direction = {
+    north: 'N',
+    south: 'S',
+    east: 'E',
+    west: 'W',
+    left: function(direction) {
+        if (direction === this.north) return this.west;
+        if (direction === this.south) return this.east;
+        if (direction === this.east) return this.north;
+        if (direction === this.west) return this.south;
+    },
+    right: function(direction) {
+        if (direction === this.north) return this.east;
+        if (direction === this.south) return this.west;
+        if (direction === this.east) return this.south;
+        if (direction === this.west) return this.north;
+    },
+}
+
 // how this will work:
 // we will call a pathbuilder 
 PathBuilder = {
@@ -114,17 +133,40 @@ PathBuilder = {
     },
     
     // create
-    // this finds a path, and starts building it
-    // should it finish building it? yes
+    // this finds a path, and builds it
+    // if it does not find a new path, returns null
+    // otherwise i builds the whole thing, calls finalize, and returns self
     create: function() {
-        var startat = self.image.findStart();
+        var image = self.image;
+        var startat = image.findStart();
+        
         if (startat === null) return null; // no more!
         
+        
+        // right now we're hard-coding a left hand turn policy.
+        var consider = startat;
+        var direction = Direction.south; // keep left hand on black pixels
+        
+        self.push(consider);
         // remember that we are assuming prepadded images right now
         // so we know for a fact that one to the left of findStart
         // is the opposite color
-        self.push( startat );
-        return self.generate().finalize();
+        while (!consider.equals(startat)) {
+            // consider needs to be a coordinate object
+            consider = image.getCoord(image.index(consider),direction);
+            self.push(consider);
+            if (image.indexer(consider) === 0) {
+                // we're going to turn left
+                direction = Direction.left(direction);
+            }
+            else if (image.indexer(consider.x-1, consider.y) === 1) {
+                // we're going to turn right
+                direction = Direction.right(direction);
+            }
+            // otherwise we're just going straight. Nothing to change.
+        }
+        // now we've generated a whole path
+        return self.finalize();
     },
     
     // if one input, it should be a coord thing from bitmap
@@ -143,8 +185,12 @@ PathBuilder = {
     
     // what does it take in?
     finalize: function() {
+        
+        // turdsize check should go here
+        
         self.allCycles.push(new Path(self.currentCycle));
         self.currentCycle.length = 0;
+        
         
         // TODO later:
         //   unpad the paths here
@@ -152,22 +198,15 @@ PathBuilder = {
         //   however, when we add in padding, we will
         //   need to unpad the images at some point
         //   and the best time to do that is probably here
-    },
-    
-    // generate should automatically create a full path :)
-    // generate only gets called after we already know
-    // there's a path to be found
-    generate: function() {
-        
+        return self;
     },
     
     // createAll
-    
-    // return object is an array of paths
-    
+    createAll: function() {
+        while (self.create() !== null) ;
+        return self;
+    },
     
 };
-
-
 
 

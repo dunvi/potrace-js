@@ -47,13 +47,24 @@ Bitmap = {
         tempContext.putImageData(tempPixels,0,0);
         return tempCanvas;
     },
-    
+
+    // given x, y coordinates, what is the value? (or a flat coordinate)
     indexer: function ( index1, index2 ) {
         if (index2 === undefined) {
             return self.image[index1];
         } else {
             // index1 = x, index2 = y
-            return self.image[index2*self.width + index1];
+            return self.image[self.index(index1, index2)];
+        }
+    },
+    
+    index: function( index1, index2 ) {
+        if (index2 === undefined) {
+            // then it's a coordinate object
+            return index1.y*self.width+index1.x;
+        } else {
+            // given x, y coordinates, what is the index?
+        return index2*self.width+index1;
         }
     },
     
@@ -80,12 +91,23 @@ Bitmap = {
         y: function (index) { return Math.floor( index / self.width ) }
     },*/
     // this one is used like this: bitmap.coord(i).x;
+    // given a flat index, what is the x,y?
     coord: function( index ) {
         return {
             x: index % self.width,
             y: Math.floor( index / self.width ),
+            equals: function(coordinate) {
+                return (this.x == coordinate.x) && (this.y == coordinate.y);
+            },
         };
     },
+    
+    // auto handle flat coordinates
+    getCoord: function( index, direction ) {
+        if (direction === 'N') return self.coord(index - self.width);
+        if (direction === 'E') return self.coord(index + 1);
+        if (direction === 'S') return self.coord(index + self.width);
+        if (direction === 'W') return self.coord(index - 1);
     
     // I don't know if we'll need this
     //slicer: function( index1, index2, index3, index4 ),
@@ -104,4 +126,5 @@ Drafter = Object.create(Bitmap, {
         }
         return null;
     },
+    
 });
