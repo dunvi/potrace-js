@@ -37,9 +37,10 @@ Path = {
     // mypath.indexer(i).x()
     // and the y coordinate with
     // mypath.indexer(i).y()
-    var self = this;
     
     init: function(path) {
+        var self = this;
+        
         // pass in the path already gathered up
         self.length = path.length / 2;
         self.cycle = new Int8Array(path);
@@ -51,17 +52,21 @@ Path = {
     },
     */
     indexer: function(index) {
-        var i = mod(index);
+        var self = this;
+        var i = self.mod(index);
+        
         return {
-            x: function() { return self.cycle[i*2]; },
-            y: function() { return self.cycle[i*2+1]; },
-            print: function() { return "(" + x + "," + y + ")"; },
+            x: function () { return self.cycle[i*2]; },
+            y: function () { return self.cycle[i*2+1]; },
+            print: function () { return "(" + this.x() + "," + this.y() + ")"; },
         };
     },
     
     // could just use indexer(i).print() all the way down
     print: function() {
+        var self = this;
         var result = "";
+        
         for (var i = 0; i < self.length; i++) {
              result += self.indexer(i).print();
         } // (x1,y1)(x2,y2)...
@@ -70,7 +75,8 @@ Path = {
     
     // a proper mathematical mod
     mod: function(index) {
-        index - self.length * Math.floor(index/self.length);
+        var self = this;
+        return index - self.length * Math.floor(index/self.length);
     },
 };
 
@@ -119,15 +125,16 @@ Direction = {
 // we will call a pathbuilder 
 PathBuilder = {
     
-    var self = this;
-    self.currentCycle = new Array();
-    self.allCycles = new Array();
+    currentCycle: new Array(),
+    allCycles: new Array(),
     
     // should take in at least the image
     // do we have the new pathbuilder object
     // find all the cycles on its own?
     // or do we then call .cycle(x,y) or whatever
     init: function(image) {
+        var self = this;
+        
         self.image = image;
         return self; // still trying to decide if i want this one here
     },
@@ -137,6 +144,8 @@ PathBuilder = {
     // if it does not find a new path, returns null
     // otherwise i builds the whole thing, calls finalize, and returns self
     create: function() {
+        var self = this;
+    
         var image = self.image;
         var startat = image.findStart();
         
@@ -171,6 +180,8 @@ PathBuilder = {
     
     // if one input, it should be a coord thing from bitmap
     push: function(index1, index2) {
+        var self = this;
+        
         if (index2 === undefined) {
             self.currentCycle.push(index1.x);
             self.currentCycle.push(index1.y);
@@ -185,10 +196,13 @@ PathBuilder = {
     
     // what does it take in?
     finalize: function() {
+        var self = this;
         
         // turdsize check should go here
         
-        self.allCycles.push(new Path(self.currentCycle));
+        pushPath = Object.create(Path);
+        pushPath.init(self.currentCycle)
+        self.allCycles.push(pushPath);
         self.currentCycle.length = 0;
         
         
@@ -203,6 +217,8 @@ PathBuilder = {
     
     // createAll
     createAll: function() {
+        var self = this;
+        
         while (self.create() !== null) ;
         return self;
     },

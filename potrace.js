@@ -9,10 +9,11 @@ testImage.addEventListener('click', function() {
     context.fillStyle = 'red';
     context.fillRect(25, 25, 50, 50);
     
-    testData = Object.create(Bitmap).init(testImage, 0);
+    testData = Object.create(Bitmap);
+    testData.init(testImage, 0);
     
-    console.log(testData.indexer(10));
-    console.log(testData.indexer(50,50));
+    console.log(testData.indexer(10)); // should return 0
+    console.log(testData.indexer(50,50)); // should return 1
     testData.setter(0,50,50);
     
     document.body.appendChild(testData.writeToCanvas());
@@ -31,10 +32,13 @@ testImage.addEventListener('click', function() {
     buildPath.push(3);
     buildPath.push(4);
     
-    testPath = new Path(buildPath);
-    console.log(testPath.length);
-    console.log(testPath.cycle);
-    console.log(testPath.print());
+    testPath = Object.create(Path);
+    testPath.init(buildPath);
+    console.log(testPath.length); // should return 6
+    console.log(testPath.cycle); // should print the flat array
+    console.log(testPath.print()); // should print a path nicely formatted
+    
+    /*
     for (var i = -10; i < 10; i++) {
         console.log("index " + i + testPath.indexer(i).print());
     };
@@ -62,7 +66,7 @@ testImage.addEventListener('click', function() {
     // else it should return a path object
     
     // probably want a controller function to find everything
-    
+    */
 });
 
 

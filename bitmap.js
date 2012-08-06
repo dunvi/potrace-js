@@ -9,9 +9,9 @@
 // set to self instead of this
 Bitmap = {
     
-    var self = this;
-
     init: function (canvasElement, threshold) {
+        var self = this;
+        
         self.width  = canvasElement.width;
         self.height = canvasElement.height;
         self.flatimagesize = self.width*self.height;
@@ -33,6 +33,8 @@ Bitmap = {
     },
     
     writeToCanvas: function() {
+        var self = this;
+        
         var tempCanvas = document.createElement('canvas');
         tempCanvas.width = self.width;
         tempCanvas.height = self.height;
@@ -50,6 +52,8 @@ Bitmap = {
 
     // given x, y coordinates, what is the value? (or a flat coordinate)
     indexer: function ( index1, index2 ) {
+        var self = this;
+        
         if (index2 === undefined) {
             return self.image[index1];
         } else {
@@ -59,6 +63,8 @@ Bitmap = {
     },
     
     index: function( index1, index2 ) {
+        var self = this;
+        
         if (index2 === undefined) {
             // then it's a coordinate object
             return index1.y*self.width+index1.x;
@@ -69,6 +75,8 @@ Bitmap = {
     },
     
     setter: function( value, index1, index2 ) {
+        var self = this;
+        
         if (index2 === undefined) {
             self.image[index1] = value;
         } else {
@@ -93,6 +101,8 @@ Bitmap = {
     // this one is used like this: bitmap.coord(i).x;
     // given a flat index, what is the x,y?
     coord: function( index ) {
+        var self = this;
+        
         return {
             x: index % self.width,
             y: Math.floor( index / self.width ),
@@ -104,11 +114,13 @@ Bitmap = {
     
     // auto handle flat coordinates
     getCoord: function( index, direction ) {
+        var self = this;
+        
         if (direction === 'N') return self.coord(index - self.width);
         if (direction === 'E') return self.coord(index + 1);
         if (direction === 'S') return self.coord(index + self.width);
         if (direction === 'W') return self.coord(index - 1);
-    
+    },
     // I don't know if we'll need this
     //slicer: function( index1, index2, index3, index4 ),
     
@@ -119,6 +131,8 @@ Bitmap = {
 Drafter = Object.create(Bitmap, {
     
     findStart: function() {
+        var self = this;
+        
         for (var i = 0; i < self.flatimagesize; i++) {
             if (self.image[i] === 1) {
                 return coord(i);
