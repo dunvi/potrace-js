@@ -43,6 +43,17 @@ testImage.addEventListener('click', function() {
         console.log("index " + i + testPath.indexer(i).print());
     }; */ // this one just takes up annoying amounts of space
     
+    testDrafter = Object.create(Drafter);
+    testDrafter.init(testImage, 0);
+    
+    testPathBuilder = Object.create(PathBuilder);
+    testPathBuilder.init(testDrafter)
+    // check what this does on FF - pretty sur ethat's not correct :)
+    
+    //testPathBuilder.createAll();
+    
+    //console.log(testPathBuilder.allCycles);
+    
     
     /*
     pathList = new Array();

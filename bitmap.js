@@ -100,14 +100,15 @@ Bitmap = {
 };
 
 //probably a better way of doing it
-Drafter = Object.create(Bitmap, {
+Drafter = Object.create(Bitmap);
+extend(Drafter, {
     
     findStart: function() {
         var self = this;
         
         for (var i = 0; i < self.flatimagesize; i++) {
             if (self.image[i] === 1) {
-                return coord(i);
+                return self.coord(i);
             }
         }
         return null;
@@ -124,3 +125,11 @@ Drafter = Object.create(Bitmap, {
     },
     
 });
+
+function extend(obj, props) {
+    for (prop in props) {
+        if (props.hasOwnProperty(prop)) {
+            obj[prop] = props[prop];
+        }
+    }
+};

@@ -71,6 +71,7 @@ PathBuilder = {
     allCycles: new Array(),
     
     // should take in at least the image
+    // by image I mean a Bitmap... I think...
     init: function(image) {
         var self = this;
         
@@ -153,7 +154,9 @@ PathBuilder = {
         //   and the best time to do that is probably here
         return self;
     },
-    
+
+    // WE CAN'T DO THIS YET BECAUSE WE STILL 
+    // NEED TO INVERT ALL INNER PIXELS
     // createAll
     createAll: function() {
         var self = this;
