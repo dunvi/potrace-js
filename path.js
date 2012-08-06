@@ -110,28 +110,35 @@ PathBuilder = {
     // or do we then call .cycle(x,y) or whatever
     init: function(image) {
         self.image = image;
+        return self; // still trying to decide if i want this one here
     },
     
     // create
     // this finds a path, and starts building it
-    // should it finish building it?
+    // should it finish building it? yes
     create: function() {
         var startat = self.image.findStart();
-        if (startat === null) return null;
+        if (startat === null) return null; // no more!
         
-        self.push( startat.x(), startat.y() );
-        
+        // remember that we are assuming prepadded images right now
+        // so we know for a fact that one to the left of findStart
+        // is the opposite color
+        self.push( startat );
+        return self.generate().finalize();
     },
     
-    // createAll
-    
-    // return object is an array of paths
-    
-    
-    
-    push: function(x, y) {
-        self.currentCycle.push(x);
-        self.currentCycle.push(y);
+    // if one input, it should be a coord thing from bitmap
+    push: function(index1, index2) {
+        if (index2 === undefined) {
+            self.currentCycle.push(index1.x);
+            self.currentCycle.push(index1.y);
+            return self;
+        } else {
+            self.currentCycle.push(x);
+            self.currentCycle.push(y);
+            return self; // more chaining possibilities!
+        }
+        return null; // something super weird just happened :)
     },
     
     // what does it take in?
@@ -145,7 +152,20 @@ PathBuilder = {
         //   however, when we add in padding, we will
         //   need to unpad the images at some point
         //   and the best time to do that is probably here
-    }
+    },
+    
+    // generate should automatically create a full path :)
+    // generate only gets called after we already know
+    // there's a path to be found
+    generate: function() {
+        
+    },
+    
+    // createAll
+    
+    // return object is an array of paths
+    
+    
 };
 
 

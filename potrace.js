@@ -9,7 +9,7 @@ testImage.addEventListener('click', function() {
     context.fillStyle = 'red';
     context.fillRect(25, 25, 50, 50);
     
-    testData = new Bitmap(testImage, 0);
+    testData = Object.create(Bitmap).init(testImage, 0);
     
     console.log(testData.indexer(10));
     console.log(testData.indexer(50,50));
