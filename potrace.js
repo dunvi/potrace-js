@@ -41,8 +41,10 @@ testImage.addEventListener('click', function() {
     /*
     for (var i = -10; i < 10; i++) {
         console.log("index " + i + testPath.indexer(i).print());
-    };
+    }; */ // this one just takes up annoying amounts of space
     
+    
+    /*
     pathList = new Array();
     testPathBuilder = new PathBuilder(testData);
     while(true) {

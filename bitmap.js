@@ -4,9 +4,6 @@
 // threshold = float (percentage at which assumed white)
 // threshold = 0 means color must be exactly white or it counts as black
 
-
-
-// set to self instead of this
 Bitmap = {
     
     init: function (canvasElement, threshold) {
@@ -30,6 +27,8 @@ Bitmap = {
                             /(3*255);
             self.image[i] = greyscale <= threshold ? 0 : 1;
         };
+        
+        return self;
     },
     
     writeToCanvas: function() {
@@ -70,7 +69,7 @@ Bitmap = {
             return index1.y*self.width+index1.x;
         } else {
             // given x, y coordinates, what is the index?
-        return index2*self.width+index1;
+            return index2*self.width+index1;
         }
     },
     
@@ -86,20 +85,6 @@ Bitmap = {
     
     // takes in an index in the flat array
     // returns the x,y coordinates it corresponds to
-    /* try the one below instead
-    coord: function( index ) {
-        
-        return {
-            x: function () { return index % self.width },
-            y: function () { return Math.floor(index/self.width) }
-        }
-    }, 
-    coord: {
-        x: function (index) { return index % self.width },
-        y: function (index) { return Math.floor( index / self.width ) }
-    },*/
-    // this one is used like this: bitmap.coord(i).x;
-    // given a flat index, what is the x,y?
     coord: function( index ) {
         var self = this;
         
@@ -112,20 +97,7 @@ Bitmap = {
         };
     },
     
-    // auto handle flat coordinates
-    getCoord: function( index, direction ) {
-        var self = this;
-        
-        if (direction === 'N') return self.coord(index - self.width);
-        if (direction === 'E') return self.coord(index + 1);
-        if (direction === 'S') return self.coord(index + self.width);
-        if (direction === 'W') return self.coord(index - 1);
-    },
-    // I don't know if we'll need this
-    //slicer: function( index1, index2, index3, index4 ),
-    
 };
-
 
 //probably a better way of doing it
 Drafter = Object.create(Bitmap, {
@@ -139,6 +111,16 @@ Drafter = Object.create(Bitmap, {
             }
         }
         return null;
+    },
+    
+    // auto handle flat coordinates
+    getCoord: function( index, direction ) {
+        var self = this;
+        
+        if (direction === 'N') return self.coord(index - self.width);
+        if (direction === 'E') return self.coord(index + 1);
+        if (direction === 'S') return self.coord(index + self.width);
+        if (direction === 'W') return self.coord(index - 1);
     },
     
 });
