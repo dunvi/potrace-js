@@ -7,45 +7,41 @@
 
 
 // set to self instead of this
-Bitmap = function (canvasElement, threshold) {
-    this.init(canvasElement, threshold);
-};
-
-Bitmap.prototype = {
+Bitmap = {
     
     var self = this;
 
     init: function (canvasElement, threshold) {
-        this.width  = canvasElement.width;
-        this.height = canvasElement.height;
-        this._flatimagesize = this.width*this.height;
+        self.width  = canvasElement.width;
+        self.height = canvasElement.height;
+        self.flatimagesize = self.width*self.height;
         
         var context = canvasElement.getContext('2d');
         var threshold = threshold || 0;
-        var imageData = context.getImageData(0,0,this.width,this.height);
+        var imageData = context.getImageData(0,0,self.width,self.height);
         
-        this.image = new Int8Array(this._flatimagesize);
+        self.image = new Int8Array(self.flatimagesize);
         
         // get greyscale to go away (stick inside a function) later
-        for (var i = 0; i < this._flatimagesize; i++) {
+        for (var i = 0; i < self.flatimagesize; i++) {
             var greyscale = (imageData.data[i*4]
                             +imageData.data[i*4+1]
                             +imageData.data[i*4+2])
                             /(3*255);
-            this.image[i] = greyscale <= threshold ? 0 : 1;
+            self.image[i] = greyscale <= threshold ? 0 : 1;
         };
     },
     
     writeToCanvas: function() {
         var tempCanvas = document.createElement('canvas');
-        tempCanvas.width = this.width;
-        tempCanvas.height = this.height;
+        tempCanvas.width = self.width;
+        tempCanvas.height = self.height;
         var tempContext = tempCanvas.getContext('2d');
-        var tempPixels = tempContext.createImageData(this.width, this.height);
-        for (var i = 0; i < this._flatimagesize; i++) {
-            tempPixels.data[i*4]   = 255*(1-this.image[i]);
-            tempPixels.data[i*4+1] = 255*(1-this.image[i]);
-            tempPixels.data[i*4+2] = 255*(1-this.image[i]);
+        var tempPixels = tempContext.createImageData(self.width, self.height);
+        for (var i = 0; i < self.flatimagesize; i++) {
+            tempPixels.data[i*4]   = 255*(1-self.image[i]);
+            tempPixels.data[i*4+1] = 255*(1-self.image[i]);
+            tempPixels.data[i*4+2] = 255*(1-self.image[i]);
             tempPixels.data[i*4+3] = 255;
         };
         tempContext.putImageData(tempPixels,0,0);
@@ -54,18 +50,18 @@ Bitmap.prototype = {
     
     indexer: function ( index1, index2 ) {
         if (index2 === undefined) {
-            return this.image[index1];
+            return self.image[index1];
         } else {
             // index1 = x, index2 = y
-            return this.image[index2*this.width + index1];
+            return self.image[index2*self.width + index1];
         }
     },
     
     setter: function( value, index1, index2 ) {
         if (index2 === undefined) {
-            this.image[index1] = value;
+            self.image[index1] = value;
         } else {
-            this.image[index2*this.width + index1] = value;
+            self.image[index2*self.width + index1] = value;
         }
     },
     
@@ -78,12 +74,18 @@ Bitmap.prototype = {
             x: function () { return index % self.width },
             y: function () { return Math.floor(index/self.width) }
         }
-    }, */
+    }, 
     coord: {
         x: function (index) { return index % self.width },
         y: function (index) { return Math.floor( index / self.width ) }
+    },*/
+    // this one is used like this: bitmap.coord(i).x;
+    coord: function( index ) {
+        return {
+            x: index % self.width,
+            y: Math.floor( index / self.width ),
+        };
     },
-    
     
     // I don't know if we'll need this
     //slicer: function( index1, index2, index3, index4 ),
@@ -91,27 +93,15 @@ Bitmap.prototype = {
 };
 
 
-// normal inheritance just doesn't work
-// because you have to inherit from objects not classes
-
-// i just don't like this
-// it's not very clear is it
-// one way of doing it
-
-make_drafter = function (canvasElement, threshold) {
-    new_drafter = Object.create(drafterPrototype);
-    new_drafter.init(canvasElement, threshold);
-    return new_drafter;
-};
-
 //probably a better way of doing it
-drafterPrototype = Object.create(Bitmap.prototype);
-
-drafterPrototype.findStart = function() {
-    for (var i = 0; i < this._flatimagesize; i++) {
-        if (this.image[i] === 1) {
-            return coord(i);
+Drafter = Object.create(Bitmap, {
+    
+    findStart: function() {
+        for (var i = 0; i < self.flatimagesize; i++) {
+            if (self.image[i] === 1) {
+                return coord(i);
+            }
         }
-    }
-    return null;
-};
+        return null;
+    },
+});

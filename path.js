@@ -1,3 +1,4 @@
+/*
 // vertexes! they don't copy things, hopefully
 // these should have their indices already modded
 // because these are sort of hidden
@@ -13,7 +14,7 @@ Vertex.prototype = {
         return "(" + this.x() + "," + this.y() + ")";
     }
 };
-
+*/
 
 
 // takes in a path in an array
@@ -22,13 +23,15 @@ Vertex.prototype = {
 // build the array as alternating x, ys
 // so even numbers are x coordinates, odd numbers are ys.
 // path will index using .indexer skipping as wanted
+/*
 Path = function(path) {
     // pass in the path already gathered up
     this.length = path.length / 2;
     this.cycle = new Int8Array(path);
 };
+*/
 
-Path.prototype = {
+Path = {
     // how to use indexer: if you have a path named mypath,
     // get the x coordinate of the ith vertex with
     // mypath.indexer(i).x()
@@ -36,9 +39,24 @@ Path.prototype = {
     // mypath.indexer(i).y()
     var self = this;
     
+    init: function(path) {
+        // pass in the path already gathered up
+        self.length = path.length / 2;
+        self.cycle = new Int8Array(path);
+    },
+    /*
     indexer: function(index) {
         var i = mod(index);
         return new Vertex(self.cycle, i);
+    },
+    */
+    indexer: function(index) {
+        var i = mod(index);
+        return {
+            x: function() { return self.cycle[i*2]; },
+            y: function() { return self.cycle[i*2+1]; },
+            print: function() { return "(" + x + "," + y + ")"; },
+        };
     },
     
     // could just use indexer(i).print() all the way down
@@ -48,13 +66,15 @@ Path.prototype = {
              result += self.indexer(i).print();
         } // (x1,y1)(x2,y2)...
         return result;
-    }
+    },
     
+    // a proper mathematical mod
     mod: function(index) {
         index - self.length * Math.floor(index/self.length);
-    }
+    },
 };
 
+/*
 // should take in at least the image
 // do we have the new pathbuilder object
 // find all the cycles on its own?
@@ -74,21 +94,34 @@ PathBuilder = function(image) {
     // when we add in automatic padding, we will have to unpad
     // the paths in pathbuilder.finalize()
 };
+*/
 
 // how this will work:
 // we will call a pathbuilder 
-PathBuilder.prototype = {
+PathBuilder = {
     
     var self = this;
+    self.currentCycle = new Array();
+    self.allCycles = new Array();
+    
+    // should take in at least the image
+    // do we have the new pathbuilder object
+    // find all the cycles on its own?
+    // or do we then call .cycle(x,y) or whatever
+    init: function(image) {
+        self.image = image;
+    },
     
     // create
+    // this finds a path, and starts building it
+    // should it finish building it?
     create: function() {
         var startat = self.image.findStart();
         if (startat === null) return null;
         
         self.push( startat.x(), startat.y() );
         
-    }
+    },
     
     // createAll
     
