@@ -92,27 +92,41 @@ PathBuilder = {
         
         if (startat === null) return null; // no more!
         
-        
         /////THIS ENTIRE SECTION SHOULD BE REMOVED SOON
         // right now we're hard-coding a left hand turn policy.
         var consider = startat;
         var direction = Direction.south; // keep left hand on black pixels
         
-        self.push(consider);
         // remember that we are assuming prepadded images right now
         // so we know for a fact that one to the left of findStart
         // is the opposite color
-        while (!consider.equals(startat)) {
+        testingcounter = 0;
+        while (true) {
             // consider needs to be a coordinate object
-            consider = image.getCoord(image.index(consider),direction);
-            self.push(consider);
-            if (image.indexer(consider) === 0) { // turn left
+            //console.log(consider.print(), direction);
+            
+            if (testingcounter === 210) break;
+            testingcounter++;
+            
+            // take a left turn
+            if (image.considerLeftTurn(consider, direction)) {
+                consider = image.takeLeftTurn(consider, direction);
                 direction = Direction.left(direction);
+                //console.log("going left! ", consider);
             }
-            else if (image.indexer(consider.x-1, consider.y) === 1) { // turn right
+            // taking a right turn involves taking a step!
+            else if (image.considerRightTurn(consider, direction)) {
+                consider = image.takeRightTurn(consider, direction);
                 direction = Direction.right(direction);
+                //console.log("going right! ", consider);
             }
-            // otherwise we're just going straight. Nothing to change.
+            else {
+                consider = image.goStraight(consider, direction);
+                //console.log("going straight! ", consider);
+            }
+            
+            self.push(consider);
+            if (consider.equals(startat)) break;
         }
         // now we've generated a whole path
         return self.finalize();
@@ -140,8 +154,10 @@ PathBuilder = {
         
         // turdsize check should go here
         
+        
         pushPath = Object.create(Path);
         pushPath.init(self.currentCycle)
+        //console.log(pushPath.print());
         self.allCycles.push(pushPath);
         self.currentCycle.length = 0;
         

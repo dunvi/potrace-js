@@ -8,7 +8,7 @@ testImage.addEventListener('click', function() {
     
     context.fillStyle = 'red';
     context.fillRect(25, 25, 50, 50);
-    
+    /*
     testData = Object.create(Bitmap);
     testData.init(testImage, 0);
     
@@ -34,10 +34,10 @@ testImage.addEventListener('click', function() {
     
     testPath = Object.create(Path);
     testPath.init(buildPath);
-    console.log(testPath.length); // should return 6
-    console.log(testPath.cycle); // should print the flat array
-    console.log(testPath.print()); // should print a path nicely formatted
-    
+    //console.log(testPath.length); // should return 6
+    //console.log(testPath.cycle); // should print the flat array
+    //console.log(testPath.print()); // should print a path nicely formatted
+    */
     /*
     for (var i = -10; i < 10; i++) {
         console.log("index " + i + testPath.indexer(i).print());
@@ -48,7 +48,11 @@ testImage.addEventListener('click', function() {
     
     testPathBuilder = Object.create(PathBuilder);
     testPathBuilder.init(testDrafter)
-    // check what this does on FF - pretty sur ethat's not correct :)
+    
+    testPathBuilder.create();
+    console.log("All cycles: ");
+    console.log(testPathBuilder.allCycles);
+    // check what this does on FF - pretty sure that's not correct :)
     
     //testPathBuilder.createAll();
     

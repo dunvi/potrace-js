@@ -49,12 +49,13 @@ Bitmap = {
         return tempCanvas;
     },
 
-    // given x, y coordinates, what is the value? (or a flat coordinate)
+    // given x, y coordinates, what is the value?
+    // (or a coordinate object)
     indexer: function ( index1, index2 ) {
         var self = this;
         
         if (index2 === undefined) {
-            return self.image[index1];
+            return self.image[self.index(index1)];
         } else {
             // index1 = x, index2 = y
             return self.image[self.index(index1, index2)];
@@ -94,6 +95,9 @@ Bitmap = {
             equals: function(coordinate) {
                 return (this.x == coordinate.x) && (this.y == coordinate.y);
             },
+            print: function() {
+                return "(" + this.x + "," + this.y + ")";
+            },
         };
     },
     
@@ -115,13 +119,54 @@ extend(Drafter, {
     },
     
     // auto handle flat coordinates
-    getCoord: function( index, direction ) {
+    // these return 1 if you should make that turn
+    // index should be a coordinate object
+    considerLeftTurn: function( index, direction ) {
         var self = this;
         
-        if (direction === 'N') return self.coord(index - self.width);
-        if (direction === 'E') return self.coord(index + 1);
-        if (direction === 'S') return self.coord(index + self.width);
-        if (direction === 'W') return self.coord(index - 1);
+        var check = self.index(index);
+        if (direction === 'N') check = self.coord(check - self.width);
+        if (direction === 'E') check = self.coord(check + 1);
+        if (direction === 'S') check = self.coord(check + self.width);
+        if (direction === 'W') check = self.coord(check - 1);
+        
+        return self.indexer(check) === 0;
+    },
+    
+    takeLeftTurn: function( index, direction ) {
+        return index;
+    },
+    
+    considerRightTurn: function( index, direction ) {
+        var self = this;
+        
+        var check = self.index(index);
+        if (direction === 'N') check = self.coord(check - self.width + 1);
+        if (direction === 'E') check = self.coord(check + self.width + 1);
+        if (direction === 'S') check = self.coord(check + self.width - 1);
+        if (direction === 'W') check = self.coord(check - self.width - 1);
+        
+        return self.indexer(check) === 1;
+    },
+    
+    takeRightTurn: function( index, direction ) {
+        var self = this;
+        
+        var check = self.index(index);
+        if (direction === 'N') return self.coord(check - self.width + 1);
+        if (direction === 'E') return self.coord(check + self.width + 1);
+        if (direction === 'S') return self.coord(check + self.width - 1);
+        if (direction === 'W') return self.coord(check - self.width - 1);
+    },
+    
+    goStraight: function( index, direction ) {
+        var self = this;
+        
+        var check = self.index(index);
+        if (direction === 'N') return self.coord(check - self.width);
+        if (direction === 'E') return self.coord(check + 1);
+        if (direction === 'S') return self.coord(check + self.width);
+        if (direction === 'W') return self.coord(check - 1);
     },
     
 });
