@@ -96,42 +96,6 @@ PathBuilder = {
         return self.finalize();
     },
     
-    leftTurnPolicy: function (startat, dir) {
-        var self = this;
-        var image = self.image;
-        
-        var direction = dir
-        var consider = startat;
-        
-        var sanitycheck = 0;
-        
-        while (sanitycheck < 500) {
-            sanitycheck++;
-            
-            if (image.considerLeftTurn(consider, direction)) {
-                consider = image.takeLeftTurn(consider, direction);
-                direction = Direction.left(direction);
-                //console.log("going left! ", consider);
-            }
-            // taking a right turn involves taking a step!
-            else if (image.considerRightTurn(consider, direction)) {
-                consider = image.takeRightTurn(consider, direction);
-                direction = Direction.right(direction);
-                //console.log("going right! ", consider);
-            }
-            else {
-                consider = image.goStraight(consider, direction);
-                //console.log("going straight! ", consider);
-            }
-            
-            self.push(consider);
-            if (consider.equals(startat)) return true;
-        }
-        
-        console.log("something might be wrong... breaking!");
-        return false;
-    },
-    
     // if one input, it should be a coord thing from bitmap
     push: function(index1, index2) {
         var self = this;
@@ -182,6 +146,80 @@ PathBuilder = {
         while (self.create() !== null) ;
         return self;
     },
+    
+    
+    leftTurnPolicy: function (startat, dir) {
+        var self = this;
+        var image = self.image;
+        
+        var direction = dir
+        var consider = startat;
+        
+        var sanitycheck = 0;
+        
+        while (sanitycheck < 500) {
+            sanitycheck++;
+            
+            if (image.considerLeftTurn(consider, direction)) {
+                consider = image.takeLeftTurn(consider, direction);
+                direction = Direction.left(direction);
+                //console.log("going left! ", consider);
+            }
+            // taking a right turn involves taking a step!
+            else if (image.considerRightTurn(consider, direction)) {
+                consider = image.takeRightTurn(consider, direction);
+                direction = Direction.right(direction);
+                //console.log("going right! ", consider);
+            }
+            else {
+                consider = image.goStraight(consider, direction);
+                //console.log("going straight! ", consider);
+            }
+            
+            self.push(consider);
+            if (consider.equals(startat)) return true;
+        }
+        
+        throw "Taking too long: something might be wrong... breaking!";
+    },
+    
+    rightTurnPolicy: function (startat, dir) {
+        var self = this;
+        var image = self.image;
+        
+        var direction = dir
+        var consider = startat;
+        
+        var sanitycheck = 0;
+        
+        while (sanitycheck < 500) {
+            sanitycheck++;
+            
+            if (image.considerRightTurn(consider, direction)) {
+                consider = image.takeRightTurn(consider, direction);
+                direction = Direction.right(direction);
+                //console.log("going right! ", consider);
+            }
+            // taking a right turn involves taking a step!
+            else if (image.considerLeftTurn(consider, direction)) {
+                consider = image.takeLeftTurn(consider, direction);
+                direction = Direction.left(direction);
+                //console.log("going left! ", consider);
+            }
+            else {
+                consider = image.goStraight(consider, direction);
+                //console.log("going straight! ", consider);
+            }
+            
+            self.push(consider);
+            if (consider.equals(startat)) return true;
+        }
+        
+        throw "Taking too long: something might be wrong... breaking!";
+    },
+    
+    
+    
     
 };
 
