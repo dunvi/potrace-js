@@ -102,10 +102,10 @@ PathBuilder = {
         // is the opposite color
         testingcounter = 0;
         while (true) {
-            // consider needs to be a coordinate object
-            //console.log(consider.print(), direction);
-            
-            if (testingcounter === 210) break;
+            if (testingcounter === 500) {
+                console.log("something might be wrong");
+                break;
+            }
             testingcounter++;
             
             // take a left turn
@@ -157,7 +157,9 @@ PathBuilder = {
         
         pushPath = Object.create(Path);
         pushPath.init(self.currentCycle)
+        
         //console.log(pushPath.print());
+        
         self.allCycles.push(pushPath);
         self.currentCycle.length = 0;
         

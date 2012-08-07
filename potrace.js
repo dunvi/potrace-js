@@ -7,7 +7,9 @@ testImage.addEventListener('click', function() {
     
     
     context.fillStyle = 'red';
-    context.fillRect(25, 25, 50, 50);
+    context.fillRect(25, 25, 50, 20);
+    context.fillRect(50, 20, 25, 50);
+    context.fillRect(25, 55, 50, 20);
     /*
     testData = Object.create(Bitmap);
     testData.init(testImage, 0);
@@ -52,6 +54,9 @@ testImage.addEventListener('click', function() {
     testPathBuilder.create();
     console.log("All cycles: ");
     console.log(testPathBuilder.allCycles);
+    
+    document.body.appendChild(testDrafter.writePathToCanvas(testPathBuilder.allCycles[0]));
+    
     // check what this does on FF - pretty sure that's not correct :)
     
     //testPathBuilder.createAll();

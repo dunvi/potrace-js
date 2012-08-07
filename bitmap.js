@@ -30,7 +30,6 @@ Bitmap = {
         
         return self;
     },
-    
     writeToCanvas: function() {
         var self = this;
         
@@ -44,7 +43,7 @@ Bitmap = {
             tempPixels.data[i*4+1] = 255*(1-self.image[i]);
             tempPixels.data[i*4+2] = 255*(1-self.image[i]);
             tempPixels.data[i*4+3] = 255;
-        };
+        }
         tempContext.putImageData(tempPixels,0,0);
         return tempCanvas;
     },
@@ -167,6 +166,27 @@ extend(Drafter, {
         if (direction === 'E') return self.coord(check + 1);
         if (direction === 'S') return self.coord(check + self.width);
         if (direction === 'W') return self.coord(check - 1);
+    },
+    
+    writePathToCanvas: function(path) {
+        var self = this;
+        
+        var tempCanvas = document.createElement('canvas');
+        tempCanvas.width = self.width;
+        tempCanvas.height = self.height;
+        var tempContext = tempCanvas.getContext('2d')
+        var tempPixels = tempContext.createImageData(self.width, self.height);
+        var tempPixel;
+        for (var i = 0; i < path.length; i++) {
+            tempPixel = path.indexer(i);
+            tempPixel = self.index(tempPixel.x(), tempPixel.y());
+            tempPixels.data[tempPixel*4]   = 0;
+            tempPixels.data[tempPixel*4+1] = 0;
+            tempPixels.data[tempPixel*4+2] = 0;
+            tempPixels.data[tempPixel*4+3] = 255;
+        }
+        tempContext.putImageData(tempPixels,0,0);
+        return tempCanvas;
     },
     
 });
