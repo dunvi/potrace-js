@@ -117,6 +117,33 @@ extend(Drafter, {
         return null;
     },
     
+    // spaceFill will return the full set of all points
+    // this will then be used for both turdsize (area = length)
+    // and for invert
+    spaceFill: function(path) {
+        var self = this;
+        var hold = new Array();
+        var result = new Array();
+        
+        var current;
+        for (var i = 0; i < path.length; i++) {
+            current = path.indexer(i);
+            
+            if (hold[current.x] === undefined) {
+                hold[current.x] = new Array();
+            }
+            
+            hold[current.x].push(current);
+        } // now hold has all path pixels sorted by x value
+        
+        console.log(hold);
+        // sort holds,
+        // take top two from list
+        // push on all inbetween
+        // repeat until empty, move to next index
+        
+    },
+    
     // auto handle flat coordinates
     // these return 1 if you should make that turn
     // index should be a coordinate object
@@ -131,11 +158,7 @@ extend(Drafter, {
         
         return self.indexer(check) === 0;
     },
-    
-    takeLeftTurn: function( index, direction ) {
-        return index;
-    },
-    
+        
     considerRightTurn: function( index, direction ) {
         var self = this;
         
@@ -158,6 +181,8 @@ extend(Drafter, {
         if (direction === 'W') return self.coord(check - self.width - 1);
     },
     
+    // takeLeftTurn is always trivial because of left-handed wallbanging
+    
     goStraight: function( index, direction ) {
         var self = this;
         
@@ -179,7 +204,7 @@ extend(Drafter, {
         var tempPixel;
         for (var i = 0; i < path.length; i++) {
             tempPixel = path.indexer(i);
-            tempPixel = self.index(tempPixel.x(), tempPixel.y());
+            tempPixel = self.index(tempPixel.x, tempPixel.y);
             tempPixels.data[tempPixel*4]   = 0;
             tempPixels.data[tempPixel*4+1] = 0;
             tempPixels.data[tempPixel*4+2] = 0;

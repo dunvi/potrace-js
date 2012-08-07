@@ -21,9 +21,9 @@ Path = {
         var i = self.mod(index);
         
         return {
-            x: function () { return self.cycle[i*2]; },
-            y: function () { return self.cycle[i*2+1]; },
-            print: function () { return "(" + this.x() + "," + this.y() + ")"; },
+            x: self.cycle[i*2],
+            y: self.cycle[i*2+1],
+            print: function () { return "(" + this.x + "," + this.y + ")"; },
         };
     },
     
@@ -167,22 +167,20 @@ PathBuilder = {
             sanitycheck++;
             
             if (image.considerLeftTurn(consider, direction)) {
-                consider = image.takeLeftTurn(consider, direction);
+                // no need for a takeLeftTurn (trivial due to lefthanded)
                 direction = Direction.left(direction);
-                //console.log("going left! ", consider);
+                // no need to push - we're going to redo this pixel
             }
-            // taking a right turn involves taking a step!
             else if (image.considerRightTurn(consider, direction)) {
                 consider = image.takeRightTurn(consider, direction);
                 direction = Direction.right(direction);
-                //console.log("going right! ", consider);
+                self.push(consider);
             }
             else {
                 consider = image.goStraight(consider, direction);
-                //console.log("going straight! ", consider);
+                self.push(consider);
             }
             
-            self.push(consider);
             if (consider.equals(startat)) return true;
         }
         
@@ -204,20 +202,18 @@ PathBuilder = {
             if (image.considerRightTurn(consider, direction)) {
                 consider = image.takeRightTurn(consider, direction);
                 direction = Direction.right(direction);
-                //console.log("going right! ", consider);
+                self.push(consider);
             }
-            // taking a right turn involves taking a step!
             else if (image.considerLeftTurn(consider, direction)) {
-                consider = image.takeLeftTurn(consider, direction);
+                // takeLeftTurn is trivial
                 direction = Direction.left(direction);
-                //console.log("going left! ", consider);
+                // no need to push
             }
             else {
                 consider = image.goStraight(consider, direction);
-                //console.log("going straight! ", consider);
+                self.push(consider);
             }
             
-            self.push(consider);
             if (consider.equals(startat)) return true;
         }
         

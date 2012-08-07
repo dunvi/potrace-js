@@ -57,6 +57,8 @@ testImage.addEventListener('click', function() {
     
     document.body.appendChild(testDrafter.writePathToCanvas(testPathBuilder.allCycles[0]));
     
+    testDrafter.spaceFill(testPathBuilder.allCycles[0]);
+    
     /*
     var temp;
     for (var i = 0; i < testPathBuilder.allCycles[0].length; i++) {
