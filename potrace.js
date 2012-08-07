@@ -57,7 +57,13 @@ testImage.addEventListener('click', function() {
     
     document.body.appendChild(testDrafter.writePathToCanvas(testPathBuilder.allCycles[0]));
     
-    // check what this does on FF - pretty sure that's not correct :)
+    /*
+    var temp;
+    for (var i = 0; i < testPathBuilder.allCycles[0].length; i++) {
+        temp = testPathBuilder.allCycles[0].indexer(i);
+        console.log(testDrafter.indexer(temp.x(), temp.y()));
+    }
+    */
     
     //testPathBuilder.createAll();
     

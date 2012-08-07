@@ -49,6 +49,10 @@ Direction = {
     south: 'S',
     east: 'E',
     west: 'W',
+    
+    // with C-type enums I could totally cheat this in
+    // an awesome way. oh well.
+    
     left: function(direction) {
         if (direction === this.north) return this.west;
         if (direction === this.south) return this.east;
@@ -117,6 +121,8 @@ PathBuilder = {
         var self = this;
         
         // turdsize check should go here
+        var turdsize = 10;
+        // if area < turdsize, don't push the path (skip the next two lines)
         
         
         pushPath = Object.create(Path);
@@ -217,9 +223,6 @@ PathBuilder = {
         
         throw "Taking too long: something might be wrong... breaking!";
     },
-    
-    
-    
     
 };
 
