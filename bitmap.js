@@ -30,6 +30,7 @@ Bitmap = {
         
         return self;
     },
+    
     writeToCanvas: function() {
         var self = this;
         
@@ -49,37 +50,24 @@ Bitmap = {
     },
 
     // given x, y coordinates, what is the value?
-    // (or a coordinate object)
     indexer: function ( index1, index2 ) {
         var self = this;
         
-        if (index2 === undefined) {
+        if (index2 === undefined) { // coordinate object
             return self.image[self.index(index1)];
         } else {
-            // index1 = x, index2 = y
             return self.image[self.index(index1, index2)];
         }
     },
     
+    // given x,y coordinates, what is a the flatarray index
     index: function( index1, index2 ) {
         var self = this;
         
-        if (index2 === undefined) {
-            // then it's a coordinate object
+        if (index2 === undefined) { // coordinate object
             return index1.y*self.width+index1.x;
         } else {
-            // given x, y coordinates, what is the index?
             return index2*self.width+index1;
-        }
-    },
-    
-    setter: function( value, index1, index2 ) {
-        var self = this;
-        
-        if (index2 === undefined) {
-            self.image[index1] = value;
-        } else {
-            self.image[index2*self.width + index1] = value;
         }
     },
     
@@ -100,9 +88,21 @@ Bitmap = {
         };
     },
     
+    // this is a just in case
+    setter: function( value, index1, index2 ) {
+        var self = this;
+        
+        if (index2 === undefined) {
+            self.image[index1] = value;
+        } else {
+            self.image[index2*self.width + index1] = value;
+        }
+    },
+    
 };
 
-//probably a better way of doing it
+// Anything that deals with the actual potrace implementation
+// should go inside drafter, NOT bitmap
 Drafter = Object.create(Bitmap);
 extend(Drafter, {
     

@@ -87,28 +87,27 @@ PathBuilder = {
     create: function() {
         var self = this;
     
-        var image = self.image;
-        var startat = image.findStart();
-        
+        var startat = self.image.findStart();
         if (startat === null) return null; // no more!
         
-        /////THIS ENTIRE SECTION SHOULD BE REMOVED SOON
-        // right now we're hard-coding a left hand turn policy.
-        var consider = startat;
-        var direction = Direction.south; // keep left hand on black pixels
+        self.leftTurnPolicy(startat, Direction.south);
         
-        // remember that we are assuming prepadded images right now
-        // so we know for a fact that one to the left of findStart
-        // is the opposite color
-        testingcounter = 0;
-        while (true) {
-            if (testingcounter === 500) {
-                console.log("something might be wrong");
-                break;
-            }
-            testingcounter++;
+        // now we've generated a whole path
+        return self.finalize();
+    },
+    
+    leftTurnPolicy: function (startat, dir) {
+        var self = this;
+        var image = self.image;
+        
+        var direction = dir
+        var consider = startat;
+        
+        var sanitycheck = 0;
+        
+        while (sanitycheck < 500) {
+            sanitycheck++;
             
-            // take a left turn
             if (image.considerLeftTurn(consider, direction)) {
                 consider = image.takeLeftTurn(consider, direction);
                 direction = Direction.left(direction);
@@ -126,10 +125,11 @@ PathBuilder = {
             }
             
             self.push(consider);
-            if (consider.equals(startat)) break;
+            if (consider.equals(startat)) return true;
         }
-        // now we've generated a whole path
-        return self.finalize();
+        
+        console.log("something might be wrong... breaking!");
+        return false;
     },
     
     // if one input, it should be a coord thing from bitmap
