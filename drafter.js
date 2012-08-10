@@ -21,6 +21,7 @@ extend(Drafter, {
         var self = this;
         var hold = new Array();
         
+        // sort by x values
         var current;
         for (var i = 0; i < path.length; i++) {
             current = path.indexer(i);
@@ -30,9 +31,9 @@ extend(Drafter, {
             }
             
             hold[current.x].push(current);
-        } // now hold has all path pixels sorted by x value
+        }
         
-        // sort holds,
+        // sort by y values, take out extra points
         var looked = new Array();
         var lookat, last;
         for (var i = 0; i < hold.length; i++) {
@@ -43,18 +44,12 @@ extend(Drafter, {
             looked.length = 0;
             
             for (var j = 0; j < lookat.length; j++) {
-                // this should also eliminate any accidental duplicates
-                // though there shouldn't be any
                 looked[lookat[j].y] = lookat[j];
             }
             
-            // kill hold[i], replace with newly schmanced up array
             hold[i].length = 0;
-            // clean out last
             last = undefined;
             
-            
-            // now this is working - can i clean this up?
             for (var j = 0; j < looked.length; j++) {
                 // short circuit initial ones again
                 if (looked[j] === undefined) ;
@@ -62,6 +57,7 @@ extend(Drafter, {
                 // skip concave blocks
                 else if (self.indexer(i, j+1) === 1
                          && self.indexer(i, j-1) === 1) ;
+                
                 else {
                     // if this is an opening one
                     if (last === undefined) hold[i].push(looked[j]);
@@ -77,17 +73,12 @@ extend(Drafter, {
             }
         }
         
-        // take top two from list
-        // push on all inbetween
-        
         var pixels = new Array();
         
         var start, end;
         for (var i = 0; i < hold.length; i++) {
             // short circuit
-            if (hold[i] === undefined || hold[i].length < 2) {
-                continue;
-            }
+            if (hold[i] === undefined || hold[i].length < 2) continue;
             
             start = hold[i].shift().y;
             end = hold[i].shift().y;
