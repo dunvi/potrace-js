@@ -150,7 +150,7 @@ extend(Drafter, {
                 // though there shouldn't be any
                 looked[lookat[j].y] = lookat[j];
             }
-            // now sorted by both x and y
+            
             // kill hold[i], replace with newly schmanced up array
             hold[i].length = 0;
             // clean out last
@@ -162,35 +162,22 @@ extend(Drafter, {
                 // short circuit initial ones again
                 if (looked[j] === undefined) ;
                 
-                // if last was undefined
-                else if (last === undefined) {
-                    // skip concave blocks
-                    if (self.indexer(i, j+1) === 1
-                        && self.indexer(i, j-1) === 1) ;
-                    // otherwise push it
-                    else hold[i].push(looked[j]);
-                }
+                // skip concave blocks
+                else if (self.indexer(i, j+1) === 1
+                         && self.indexer(i, j-1) === 1) ;
                 else {
+                    // if this is an opening one
+                    if (last === undefined) hold[i].push(looked[j]);
                     // if this one is right next to the previous one
-                    if (looked[j].y - last.y === 1) {
-                        // keep it if it's the end of the sequence
+                    else if (looked[j].y - last.y === 1) {
+                        // only keep it if it's the end of a sequence
                         if (self.indexer(i, j+1) === 0) {
                             hold[i].push(looked[j]);
                         }
-                        // otherwise loose it
-                    }
-                    // if this one is NOT right next to the last one
-                    else {
-                        // if it's a concave block, skip it
-                        if (self.indexer(i, j+1) === 1
-                            && self.indexer(i, j-1) === 1) ;
-                        // otherwise push it
-                        else hold[i].push(looked[j]);
                     }
                 }
                 last = looked[j];
             }
-            
         }
         
         // take top two from list
@@ -212,8 +199,7 @@ extend(Drafter, {
             }
         }
         
-        console.log(pixels);
-        
+        return pixels;
     },
     
     // auto handle flat coordinates
