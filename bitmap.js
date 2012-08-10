@@ -123,7 +123,6 @@ extend(Drafter, {
     spaceFill: function(path) {
         var self = this;
         var hold = new Array();
-        var result = new Array();
         
         var current;
         for (var i = 0; i < path.length; i++) {
@@ -135,6 +134,8 @@ extend(Drafter, {
             
             hold[current.x].push(current);
         } // now hold has all path pixels sorted by x value
+        
+        console.log(JSON.stringify(hold));
         
         // sort holds,
         var looked = new Array();
@@ -156,29 +157,75 @@ extend(Drafter, {
             hold[i].length = 0;
             // clean out last
             last = undefined;
+            
+            
+            // now this is working - can i clean this up?
             for (var j = 0; j < looked.length; j++) {
                 // short circuit initial ones again
                 if (looked[j] === undefined) ;
-                // unless it's right next to the previous one, keep it
-                // we want to kill sequences
-                else if (last === undefined || looked[j].y - last.y !== 1) {
-                    hold[i].push(looked[j]);
+                
+                // if last was undefined
+                else if (last === undefined) {
+                    // skip concave blocks
+                    if (self.indexer(i, j+1) === 1
+                        && self.indexer(i, j-1) === 1) ;
+                    // otherwise push it
+                    else hold[i].push(looked[j]);
                 }
-                // don't lose the last of a sequence!
-                else if (looked[j+1] === undefined) {
-                    hold[i].push(looked[j]);
+                else {
+                    // if this one is right next to the previous one
+                    if (looked[j].y - last.y === 1) {
+                        // keep it if it's the end of the sequence
+                        if (self.indexer(i, j+1) === 0) {
+                            hold[i].push(looked[j]);
+                        }
+                        // otherwise loose it
+                    }
+                    // if this one is NOT right next to the last one
+                    else {
+                        // if it's a concave block, skip it
+                        if (self.indexer(i, j+1) === 1
+                            && self.indexer(i, j-1) === 1) ;
+                        // otherwise push it
+                        else hold[i].push(looked[j]);
+                    }
                 }
-                // don't forget what the last one was
                 last = looked[j];
             }
             
         }
-        console.log(hold);
         
         // take top two from list
         // push on all inbetween
-        // repeat until empty, move to next index
         
+        var pixels = new Array();
+        
+        console.log(hold);
+        
+        
+        console.log(self.indexer(50,44));
+        console.log(self.indexer(50,45));
+        console.log(self.indexer(50,46));
+        
+        /*
+        var start, end;
+        for (var i = 0; i < hold.length; i++) {
+            // short circuit
+            if (hold[i] === undefined || hold[i].length < 2) {
+                continue;
+            }
+            
+            lookat = hold[i];
+            
+            start = lookat.shift().y;
+            end = lookat.shift().y;
+            for (var j = start; j <= end; j++) {
+                pixels.push(self.coord(self.index(i,j)));
+            }
+        }
+        
+        console.log(pixels);
+        */
     },
     
     // auto handle flat coordinates
