@@ -14,10 +14,10 @@ extend(Drafter, {
         return null;
     },
     
-    // spaceFill will return the full set of all points
+    // gather will return the full set of all points
     // this will then be used for both turdsize (area = length)
     // and for invert
-    spaceFill: function(path) {
+    gather: function(path) {
         var self = this;
         var hold = new Array();
         
@@ -88,6 +88,19 @@ extend(Drafter, {
         }
         
         return pixels;
+    },
+    
+    // invert - pass in a path
+    invert: function(insides) {
+        var self = this;
+        
+        var current, check;
+        for (var i = 0; i < insides.length; i++) {
+            current = insides[i];
+            check = self.indexer(current.x, current.y) === 0 ? 1 : 0;
+            
+            self.setter(check, current.x, current.y);
+        }
     },
     
     // auto handle flat coordinates

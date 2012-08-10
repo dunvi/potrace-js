@@ -70,21 +70,29 @@ PathBuilder = {
         return null; // something super weird just happened :)
     },
     
-    // what does it take in?
+    // at some point change to take in turdsize instead of hard-coding
     finalize: function() {
         var self = this;
-        
-        // turdsize check should go here
-        var turdsize = 10;
-        // if area < turdsize, don't push the path (skip the next two lines)
-        
+        var image = self.image;
         
         pushPath = Object.create(Path);
         pushPath.init(self.currentCycle)
         
-        //console.log(pushPath.print());
+        var insides = image.gather(pushPath);
+        // if legal given turdsize, push the path onto all cycles
+        // turdsize = 0 means push all paths regardless of area
+        var turdsize = 0;
+        if (insides.length > turdsize) {
+            self.allCycles.push(pushPath);
+        }
         
-        self.allCycles.push(pushPath);
+        // regardless of whether it was pushed, invert
+        // the inside, then clear currentCycle.
+        image.invert(insides);
+        
+        document.body.appendChild(image.writePathToCanvas(pushPath));
+        document.body.appendChild(image.writeToCanvas());
+        
         self.currentCycle.length = 0;
         
         
@@ -97,13 +105,13 @@ PathBuilder = {
         return self;
     },
 
-    // WE CAN'T DO THIS YET BECAUSE WE STILL 
-    // NEED TO INVERT ALL INNER PIXELS
     // createAll
     createAll: function() {
         var self = this;
         
-        while (self.create() !== null) ;
+        while (self.create() !== null) {
+            console.log("found a path!");
+        }
         return self;
     },
     
