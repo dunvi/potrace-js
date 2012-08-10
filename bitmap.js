@@ -135,8 +135,6 @@ extend(Drafter, {
             hold[current.x].push(current);
         } // now hold has all path pixels sorted by x value
         
-        console.log(JSON.stringify(hold));
-        
         // sort holds,
         var looked = new Array();
         var lookat, last;
@@ -200,14 +198,6 @@ extend(Drafter, {
         
         var pixels = new Array();
         
-        console.log(hold);
-        
-        
-        console.log(self.indexer(50,44));
-        console.log(self.indexer(50,45));
-        console.log(self.indexer(50,46));
-        
-        /*
         var start, end;
         for (var i = 0; i < hold.length; i++) {
             // short circuit
@@ -225,7 +215,7 @@ extend(Drafter, {
         }
         
         console.log(pixels);
-        */
+        
     },
     
     // auto handle flat coordinates
