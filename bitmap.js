@@ -136,8 +136,45 @@ extend(Drafter, {
             hold[current.x].push(current);
         } // now hold has all path pixels sorted by x value
         
-        console.log(hold);
         // sort holds,
+        var looked = new Array();
+        var lookat, last;
+        for (var i = 0; i < hold.length; i++) {
+            // short circuit all of those initial ones
+            if (hold[i] === undefined) continue;
+            
+            lookat = hold[i];
+            looked.length = 0;
+            
+            for (var j = 0; j < lookat.length; j++) {
+                // this should also eliminate any accidental duplicates
+                // though there shouldn't be any
+                looked[lookat[j].y] = lookat[j];
+            }
+            // now sorted by both x and y
+            // kill hold[i], replace with newly schmanced up array
+            hold[i].length = 0;
+            // clean out last
+            last = undefined;
+            for (var j = 0; j < looked.length; j++) {
+                // short circuit initial ones again
+                if (looked[j] === undefined) ;
+                // unless it's right next to the previous one, keep it
+                // we want to kill sequences
+                else if (last === undefined || looked[j].y - last.y !== 1) {
+                    hold[i].push(looked[j]);
+                }
+                // don't lose the last of a sequence!
+                else if (looked[j+1] === undefined) {
+                    hold[i].push(looked[j]);
+                }
+                // don't forget what the last one was
+                last = looked[j];
+            }
+            
+        }
+        console.log(hold);
+        
         // take top two from list
         // push on all inbetween
         // repeat until empty, move to next index
