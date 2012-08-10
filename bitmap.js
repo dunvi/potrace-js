@@ -205,10 +205,8 @@ extend(Drafter, {
                 continue;
             }
             
-            lookat = hold[i];
-            
-            start = lookat.shift().y;
-            end = lookat.shift().y;
+            start = hold[i].shift().y;
+            end = hold[i].shift().y;
             for (var j = start; j <= end; j++) {
                 pixels.push(self.coord(self.index(i,j)));
             }
