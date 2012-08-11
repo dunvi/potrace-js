@@ -40,12 +40,12 @@ Path = {
         var curr = self.indexer(index);
         
         var xdiff = curr.x - prev.x;
-        if (xdiff =  1) return Direction.east;
-        if (xdiff = -1) return Direction.west;
+        if (xdiff ===  1) return Direction.east;
+        if (xdiff === -1) return Direction.west;
         
         var ydiff = curr.y - prev.y;
-        if (ydiff =  1) return Direction.south;
-        if (ydiff = -1) return Direction.north;
+        if (ydiff ===  1) return Direction.south;
+        if (ydiff === -1) return Direction.north;
         
         throw "what direction are you going anyway?";
     },

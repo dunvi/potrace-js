@@ -9,7 +9,7 @@ Vector = {
         self.y = 0;
         
         return self;
-    }
+    },
     
     // takes in 2 coordinate objects
     init: function( start, end ) {

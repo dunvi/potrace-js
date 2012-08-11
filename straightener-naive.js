@@ -3,7 +3,7 @@ Straightener = {
     
     path: undefined,
     start: undefined, // path indexer object
-    end: undefined // path indexer object
+    end: undefined, // path indexer object
     longest: new Array(),
     
     init: function(path) {
@@ -46,8 +46,6 @@ Straightener = {
         // that's about it.
         var self = this;
         var path = self.path;
-        var start = self.start;
-        var end = self.end;
         
         // set start to path.indexer(0)
         // loop:
@@ -62,35 +60,35 @@ Straightener = {
         
         var dirs = new Array();
         for (var i = 0; i < path.length; i++) {
-            start = path.indexer(i);
+            self.start = path.indexer(i);
             dirs.length = 0;
             
             var dir;
             var j = 1;
             while (true) {
-                end = path.indexer(start.i + j);
+                self.end = path.indexer(self.start.i + j);
                 
                 if (!self.isStraight()) break;
                 
                 // this is disgustingly ugly here
-                dir = path.getDir(end.i);
+                dir = path.getDir(self.end.i);
+                //console.log(dir);
                 if (dir === Direction.north) dirs[0] = 1;
                 else if (dir === Direction.south) dirs[1] = 1;
                 else if (dir === Direction.east ) dirs[2] = 1;
                 else if (dir === Direction.west ) dirs[3] = 1;
+                
                 // if you have gone all four directions, break!
                 if (!isNaN(dirs[0] + dirs[1] + dirs[2] + dirs[3])) break;
                 
-                self.longest[i] = end.i;
+                self.longest[i] = self.end.i;
                 j++;
             }
         }
         // at end, for each i, longest[i] should hold the index of path
         // for which i could be connected to and still considered straight
         
-        console.log(self.longest);
-        
         return self;
-    };
+    },
     
 };
