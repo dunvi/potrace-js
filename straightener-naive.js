@@ -15,6 +15,7 @@ Straightener = {
         return self;
     },
     
+    // returns false when it cannot be considered straight anymore
     isStraight: function() {
         var self = this;
         var start = self.start;
@@ -43,6 +44,10 @@ Straightener = {
         // we start with a longest array that needs to be filled
         // we start knowing the path that we're going to look at
         // that's about it.
+        var self = this;
+        var path = self.path;
+        var start = self.start;
+        var end = self.end;
         
         // set start to path.indexer(0)
         // loop:
@@ -53,8 +58,39 @@ Straightener = {
         //        if fails,
         //            set longest[i] to end
         //            increment start, break;
+        // dont forget the directional check... hmmmmmmm
+        
+        var dirs = new Array();
+        for (var i = 0; i < path.length; i++) {
+            start = path.indexer(i);
+            dirs.length = 0;
+            
+            var dir;
+            var j = 1;
+            while (true) {
+                end = path.indexer(start.i + j);
+                
+                if (!self.isStraight()) break;
+                
+                // this is disgustingly ugly here
+                dir = path.getDir(end.i);
+                if (dir === Direction.north) dirs[0] = 1;
+                else if (dir === Direction.south) dirs[1] = 1;
+                else if (dir === Direction.east ) dirs[2] = 1;
+                else if (dir === Direction.west ) dirs[3] = 1;
+                // if you have gone all four directions, break!
+                if (!isNaN(dirs[0] + dirs[1] + dirs[2] + dirs[3])) break;
+                
+                self.longest[i] = end.i;
+                j++;
+            }
+        }
         // at end, for each i, longest[i] should hold the index of path
         // for which i could be connected to and still considered straight
+        
+        console.log(self.longest);
+        
+        return self;
     };
     
 };

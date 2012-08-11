@@ -20,16 +20,34 @@ Path = {
     },
     
     // gets both x and y of a certain vertex
-    indexer: function(index) {
+    indexer: function(pathIndex) {
         var self = this;
-        var i = self.mod(index);
+        var index = self.mod(pathIndex);
         
         return {
-            x: self.cycle[i*2],
-            y: self.cycle[i*2+1],
-            pathIndex: i,
+            x: self.cycle[index*2],
+            y: self.cycle[index*2+1],
+            i: index,
             print: function () { return "(" + this.x + "," + this.y + ")"; },
         };
+    },
+    
+    // returns the direction from the previous point to the index
+    getDir: function(index) {
+        var self = this;
+        
+        var prev = self.indexer(index-1);
+        var curr = self.indexer(index);
+        
+        var xdiff = curr.x - prev.x;
+        if (xdiff =  1) return Direction.east;
+        if (xdiff = -1) return Direction.west;
+        
+        var ydiff = curr.y - prev.y;
+        if (ydiff =  1) return Direction.south;
+        if (ydiff = -1) return Direction.north;
+        
+        throw "what direction are you going anyway?";
     },
     
     print: function() {
