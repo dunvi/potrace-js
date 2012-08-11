@@ -86,10 +86,13 @@ PathBuilder = {
             self.allCycles.push(pushPath);
         }
         
+        console.log(insides);
+        
         // regardless of whether it was pushed, invert
         // the inside, then clear currentCycle.
         image.invert(insides);
         
+        // debugging stuff
         document.body.appendChild(image.writePathToCanvas(pushPath));
         document.body.appendChild(image.writeToCanvas());
         

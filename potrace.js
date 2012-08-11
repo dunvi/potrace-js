@@ -8,8 +8,9 @@ testImage.addEventListener('click', function() {
     
     context.fillStyle = 'red';
     context.fillRect(25, 25, 50, 20);
-    context.fillRect(50, 20, 25, 50);
+    context.fillRect(50, 20, 20, 50);
     context.fillRect(25, 55, 50, 20);
+    context.fillRect(40, 25, 05, 30);
     
     testDrafter = Object.create(Drafter);
     testDrafter.init(testImage, 0);

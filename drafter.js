@@ -17,6 +17,7 @@ extend(Drafter, {
     // gather will return the full set of all points
     // this will then be used for both turdsize (area = length)
     // and for invert
+    // gather is losing the bottom half of a concavity? uh oh
     gather: function(path) {
         var self = this;
         var hold = new Array();
@@ -75,22 +76,33 @@ extend(Drafter, {
         
         var pixels = new Array();
         
+        var i = -1; // ew
         var start, end;
-        for (var i = 0; i < hold.length; i++) {
+        while (true) {
             // short circuit
-            if (hold[i] === undefined || hold[i].length < 2) continue;
+            if ( i === hold.length ) break;
+            if ( hold[i] === undefined || hold[i].length < 2 ) {
+                i++;
+                continue;
+            }
             
             start = hold[i].shift().y;
             end = hold[i].shift().y;
             for (var j = start; j <= end; j++) {
                 pixels.push(self.coord(self.index(i,j)));
             }
+            
         }
         
         return pixels;
     },
     
     // invert - pass in a path
+    // consider altering turdsize to completely white out
+    // the inside of a path if it failed the turdsize check -
+    // since this path's area is already too small for any
+    // paths to be retained, we know any more detailed
+    // speckling is irrelevant.
     invert: function(insides) {
         var self = this;
         
