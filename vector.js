@@ -3,6 +3,14 @@ Vector = {
     x: undefined,
     y: undefined,
     
+    init0: function() {
+        var self = this;
+        self.x = 0;
+        self.y = 0;
+        
+        return self;
+    }
+    
     // takes in 2 coordinate objects
     init: function( start, end ) {
         var self = this;

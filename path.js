@@ -27,6 +27,7 @@ Path = {
         return {
             x: self.cycle[i*2],
             y: self.cycle[i*2+1],
+            pathIndex: i,
             print: function () { return "(" + this.x + "," + this.y + ")"; },
         };
     },
