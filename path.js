@@ -6,6 +6,10 @@
 // path will index using .indexer skipping as wanted
 
 Path = {
+    
+    length: undefined,
+    cycle: undefined,
+    
     init: function(path) {
         var self = this;
         

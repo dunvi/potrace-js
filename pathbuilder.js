@@ -13,11 +13,15 @@ PathBuilder = {
         return self;
     },
     
+    
+    // find all maximum length straight paths for each index
+    
+    
     // create
     // this finds a path, and builds it
     // if it does not find a new path, returns null
     // otherwise it builds the whole thing, calls 
-    // finalize, and returns self
+    // save, and returns self
     create: function() {
         var self = this;
     
@@ -27,11 +31,11 @@ PathBuilder = {
         self.leftTurnPolicy(startat, Direction.south);
         
         // now we've generated a whole path
-        return self.finalize();
+        return self.save();
     },
     
     // if one input, it should be a coord thing from bitmap
-    push: function(index1, index2) {
+    pushVertex: function(index1, index2) {
         var self = this;
         
         if (index2 === undefined) {
@@ -47,7 +51,7 @@ PathBuilder = {
     },
     
     // at some point change to take in turdsize instead of hard-coding
-    finalize: function() {
+    save: function() {
         var self = this;
         var image = self.image;
         
@@ -115,11 +119,11 @@ PathBuilder = {
             else if (image.considerRightTurn(consider, direction)) {
                 consider = image.takeRightTurn(consider, direction);
                 direction = Direction.right(direction);
-                self.push(consider);
+                self.pushVertex(consider);
             }
             else {
                 consider = image.goStraight(consider, direction);
-                self.push(consider);
+                self.pushVertex(consider);
             }
             
             if (consider.equals(startat)) return true;
@@ -143,7 +147,7 @@ PathBuilder = {
             if (image.considerRightTurn(consider, direction)) {
                 consider = image.takeRightTurn(consider, direction);
                 direction = Direction.right(direction);
-                self.push(consider);
+                self.pushVertex(consider);
             }
             else if (image.considerLeftTurn(consider, direction)) {
                 // takeLeftTurn is trivial
@@ -152,7 +156,7 @@ PathBuilder = {
             }
             else {
                 consider = image.goStraight(consider, direction);
-                self.push(consider);
+                self.pushVertex(consider);
             }
             
             if (consider.equals(startat)) return true;

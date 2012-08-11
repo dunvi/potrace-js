@@ -6,6 +6,11 @@
 
 Bitmap = {
     
+    width: undefined,
+    height: undefined,
+    flatimagesize: undefined,
+    image: undefined,
+    
     init: function (canvasElement, threshold) {
         var self = this;
         
