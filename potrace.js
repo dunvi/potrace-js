@@ -18,15 +18,9 @@ testImage.addEventListener('click', function() {
     testPathBuilder = Object.create(PathBuilder);
     testPathBuilder.init(testDrafter)
     
-    //testPathBuilder.create();
-    //console.log("All cycles: ");
-    //console.log(testPathBuilder.allCycles);
-    
-    
     testPathBuilder.createAll();
     
-    //document.body.appendChild(testDrafter.writePathToCanvas(testPathBuilder.allCycles[0]));
-    
+    //console.log("All cycles: ");
     console.log(testPathBuilder.allCycles);
     
 });
