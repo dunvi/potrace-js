@@ -38,5 +38,23 @@ Straightener = {
         return true;
     },
     
+    findStraights: function() {
+        // okay what do we start with?
+        // we start with a longest array that needs to be filled
+        // we start knowing the path that we're going to look at
+        // that's about it.
+        
+        // set start to path.indexer(0)
+        // loop:
+        //     set end to start+1
+        //     loop:
+        //        check for straightness
+        //        if straight, increment end, continue
+        //        if fails,
+        //            set longest[i] to end
+        //            increment start, break;
+        // at end, for each i, longest[i] should hold the index of path
+        // for which i could be connected to and still considered straight
+    };
     
 };
