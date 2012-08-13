@@ -19,8 +19,6 @@ Straightener = {
     isStraight: function() {
         var self = this;
         
-        //console.log("entering isStraight: ", self.start.i, self.end.i);
-        
         if (self.end.i === self.start.i) throw "how did we get back here?";
         
         var length, mid;
@@ -35,25 +33,12 @@ Straightener = {
             length = Math.abs( (mid.x - self.start.x) * (self.end.y - self.start.y)
                              - (mid.y - self.start.y) * (self.end.x - self.start.x) )
                      / mindist;
-            //console.log(self.start.i, mid.i, self.end.i, mindist, length);
             if (length > 1) return false;
             
             x++;
         }
         
         return true;
-        /*
-        for (var x = self.start.i + 1; x < self.end.i; x++) {
-            mid = self.path.indexer(x);
-            length = Math.abs( (mid.x - self.start.x) * (self.end.y - self.start.y)
-                             - (mid.y - self.start.y) * (self.end.x - self.start.x) )
-                     / mindist;
-            console.log(self.start.i, mid.i, self.end.i, mindist, length);
-            if (length > 1) return false;
-        }
-        
-        return true;
-        */
     },
     
     findStraights: function() {
@@ -73,7 +58,6 @@ Straightener = {
         //        if fails,
         //            set longest[i] to end
         //            increment start, break;
-        // dont forget the directional check... hmmmmmmm
         
         var dirs = new Array();
         for (var i = 0; i < path.length; i++) {
@@ -88,7 +72,7 @@ Straightener = {
                 // if you have gone all four directions, break!
                 // this is disgustingly ugly here
                 dir = path.getDir(self.end.i);
-                //console.log(dir);
+                
                 if (dir === Direction.north) dirs[0] = 1;
                 else if (dir === Direction.south) dirs[1] = 1;
                 else if (dir === Direction.east ) dirs[2] = 1;
@@ -101,8 +85,6 @@ Straightener = {
                 
                 self.longest[i] = self.end.i;
                 j++;
-                
-                //console.log(self.start, self.end);
             }
         }
         // at end, for each i, longest[i] should hold the index of path
