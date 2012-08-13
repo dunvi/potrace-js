@@ -72,6 +72,7 @@ Bitmap = {
         if (index2 === undefined) { // coordinate object
             return index1.y*self.width+index1.x;
         } else {
+            if (isNaN(index1) || isNaN(index2)) throw "can't index with non-numbers!";
             return index2*self.width+index1;
         }
     },
@@ -80,6 +81,8 @@ Bitmap = {
     // returns the x,y coordinates it corresponds to
     coord: function( index ) {
         var self = this;
+        
+        if (isNaN(index)) throw "can't get coords for a non-number index!";
         
         return {
             x: index % self.width,

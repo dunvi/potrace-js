@@ -18,25 +18,42 @@ Straightener = {
     // returns false when it cannot be considered straight anymore
     isStraight: function() {
         var self = this;
-        var start = self.start;
-        var end = self.end;
         
-        if (end.i === start.i) throw "how did we get back here?";
-        // it's always true if you are only 3 away!
-        if (end.i - start.i < 3) return true;
+        //console.log("entering isStraight: ", self.start.i, self.end.i);
         
-        var normal = Math.sqrt( Math.pow(end.x - start.x, 2)
-                              + Math.pow(end.y - start.y, 2));
-        var mid = self.path.indexer(i);
-        var length;
-        for (var i = start.i + 1; i < end.i; i++) {
-            length = Math.abs( (mid.x - start.x) * (end.y - start.y)
-                             - (mid.y - start.y) * (end.x - start.x))
-                     / normal;
+        if (self.end.i === self.start.i) throw "how did we get back here?";
+        
+        var length, mid;
+        var mindist = Math.sqrt( Math.pow(self.end.x - self.start.x, 2) 
+                               + Math.pow(self.end.y - self.start.y, 2) );
+        var x = self.start.i + 1;
+        while (true) {
+            mid = self.path.indexer(x);
+            
+            if (mid.i === self.end.i) break;
+            
+            length = Math.abs( (mid.x - self.start.x) * (self.end.y - self.start.y)
+                             - (mid.y - self.start.y) * (self.end.x - self.start.x) )
+                     / mindist;
+            //console.log(self.start.i, mid.i, self.end.i, mindist, length);
+            if (length > 1) return false;
+            
+            x++;
+        }
+        
+        return true;
+        /*
+        for (var x = self.start.i + 1; x < self.end.i; x++) {
+            mid = self.path.indexer(x);
+            length = Math.abs( (mid.x - self.start.x) * (self.end.y - self.start.y)
+                             - (mid.y - self.start.y) * (self.end.x - self.start.x) )
+                     / mindist;
+            console.log(self.start.i, mid.i, self.end.i, mindist, length);
             if (length > 1) return false;
         }
         
         return true;
+        */
     },
     
     findStraights: function() {
@@ -68,8 +85,7 @@ Straightener = {
             while (true) {
                 self.end = path.indexer(self.start.i + j);
                 
-                if (!self.isStraight()) break;
-                
+                // if you have gone all four directions, break!
                 // this is disgustingly ugly here
                 dir = path.getDir(self.end.i);
                 //console.log(dir);
@@ -78,11 +94,15 @@ Straightener = {
                 else if (dir === Direction.east ) dirs[2] = 1;
                 else if (dir === Direction.west ) dirs[3] = 1;
                 
-                // if you have gone all four directions, break!
                 if (!isNaN(dirs[0] + dirs[1] + dirs[2] + dirs[3])) break;
+                
+                // we know that the 2 js are always straight
+                if (j > 2) if (!self.isStraight()) break;
                 
                 self.longest[i] = self.end.i;
                 j++;
+                
+                //console.log(self.start, self.end);
             }
         }
         // at end, for each i, longest[i] should hold the index of path

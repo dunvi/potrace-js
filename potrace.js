@@ -41,6 +41,8 @@ testImage.addEventListener('click', function() {
     for (var i = 0; i < longests.length; i++) {
         mystart = mypath.indexer(i);
         myend = mypath.indexer(longests[i]);
+        tempContext.strokeStyle = 'rgb(' + i + ',' + '0' + ','
+                                  + '0' + ')';
         tempContext.beginPath();
         tempContext.moveTo(mystart.x, mystart.y);
         tempContext.lineTo(myend.x, myend.y);

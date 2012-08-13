@@ -24,6 +24,8 @@ Path = {
         var self = this;
         var index = self.mod(pathIndex);
         
+        if (isNaN(index)) throw "can't index with a non-number!";
+        
         return {
             x: self.cycle[index*2],
             y: self.cycle[index*2+1],
@@ -63,6 +65,9 @@ Path = {
     // a proper mathematical mod
     mod: function(index) {
         var self = this;
+        
+        if (isNaN(index)) throw "can't mod a non-number!";
+        
         return index - self.length * Math.floor(index/self.length);
     },
 };
