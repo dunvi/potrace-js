@@ -81,21 +81,22 @@ Straightener = {
         //            set longest[i] to end
         //            increment start, break;
         
+        var dir, j;
         var dirs = new Array();
+        
         for (var i = 0; i < path.length; i++) {
             self.start = path.indexer(i);
             dirs.length = 0;
             
-            var dir;
-            var j = 1;
+            k = 1;
             while (true) {
-                self.end = path.indexer(self.start.i + j);
+                self.end = path.indexer(self.start.i + k);
                 
                 // if you have gone all four directions, break!
                 // this is disgustingly ugly here
                 dir = path.getDir(self.end.i);
                 
-                if (dir === Direction.north) dirs[0] = 1;
+                if      (dir === Direction.north) dirs[0] = 1;
                 else if (dir === Direction.south) dirs[1] = 1;
                 else if (dir === Direction.east ) dirs[2] = 1;
                 else if (dir === Direction.west ) dirs[3] = 1;
@@ -103,10 +104,10 @@ Straightener = {
                 if (!isNaN(dirs[0] + dirs[1] + dirs[2] + dirs[3])) break;
                 
                 // we know that the 2 js are always straight
-                if (j > 2) if (!self.isStraight()) break;
+                if (k > 2) if (!self.isStraight()) break;
                 
                 self.longest[i] = self.end.i;
-                j++;
+                k++;
             }
         }
         // at end, for each i, longest[i] should hold the index of path

@@ -15,8 +15,8 @@ Straightener = {
     longest: new Array(),
     // A and B actually stand for above and below :P
     // although above and below are technically meaningless lol
-    constraintA: Object.create(Vector).init0(),
-    constraintB: Object.create(Vector).init0(),
+    constraintA: Object.create(Vector), // note these are uninitialized!
+    constraintB: Object.create(Vector), // initialized inside the main loop
     
     offset: Object.create(Vector).init0(),
     
@@ -27,6 +27,10 @@ Straightener = {
         self.path = path;
         
         return self;
+    },
+    
+    initAll: function(allCycles) {
+    
     },
     
     // constraintCheck returns true if the end coord object
@@ -78,6 +82,55 @@ Straightener = {
         return self;
     },
     
+    findStraights: function() {
+        var self = this;
+        var path = self.path;
+        
+        var kpivs = new Array();
+        
+        var dir, k;
+        var dirs = new Array();
+        
+        for (var i = path.length - 1; i !== 0; i--) {
+            constraintA.init0();
+            constraintB.init0();
+            dirs.length = 0;
+            
+            k = 1;
+            while (true) {
+                self.end = path.indexer(self.start.i + k);
+                
+                // first check directions
+                dir = path.getDir(self.end.i);
+                
+                if      (dir === Direction.north) dirs[0] = 1;
+                else if (dir === Direction.south) dirs[1] = 1;
+                else if (dir === Direction.east ) dirs[2] = 1;
+                else if (dir === Direction.west ) dirs[3] = 1;
+                
+                if (!isNaN(dirs[0] + dirs[1] + dirs[2] + dirs[3])) break;
+                
+                //otherwise check constraints
+                if (k > 2) if (self.constraintCheck()) break;
+                
+                kpivs[i] = self.end.i;
+                self.setConstraints();
+                k++;
+            }
+        }
+        
+        // hack until we know why there are kpivs :P
+        // start at line 198 here (on potrace-python)
+        // try to pretend you know what's going on :P
+        var j;
+        longest[path.length-1] = j;
+        
+        for (var i = path.length - 1; i !== 0; i--) {
+            longest[i] = kpivs[i];
+        }
+        
+        return self;
+    },
     
     cross: function( v1, v2 ) {
         return v1.x * v2.y - v2.x * v1.y;
