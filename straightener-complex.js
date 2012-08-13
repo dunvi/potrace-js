@@ -1,3 +1,11 @@
+/* The Straightener API:
+
+The straightener gets called from the PathBuilder
+
+var mystraighter = Object.create(Straightener).initAll(allCycles);
+
+*/
+
 // handles the straightening stuff
 Straightener = {
     

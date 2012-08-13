@@ -3,19 +3,23 @@ PathBuilder = {
     
     currentCycle: new Array(),
     allCycles: new Array(),
+    straightener: Object.create(Straightener),
     
     // should take in at least the image
     // by image I mean a Bitmap... I think...
-    init: function(image) {
+    run: function(image) {
         var self = this;
         
         self.image = image;
-        return self;
+        return self.createAll().straighten();
     },
     
-    
-    // find all maximum length straight paths for each index
-    
+    straighten: function() {
+        var self = this;
+        
+        self.straightener.initAll(self.allCycles)
+        return self;
+    },
     
     // create
     // this finds a path, and builds it

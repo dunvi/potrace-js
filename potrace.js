@@ -5,30 +5,27 @@ var context = testImage.getContext('2d');
 
 testImage.addEventListener('click', function() {
     
-    
+    // once you have an image...
     context.fillStyle = 'red';
     context.fillRect(25, 25, 50, 20);
     context.fillRect(50, 20, 20, 50);
     context.fillRect(25, 55, 50, 20);
     context.fillRect(40, 25, 05, 30);
     
+    // you just convert the image to a drafter object...
     testDrafter = Object.create(Drafter);
     testDrafter.init(testImage, 0);
     
-    testPathBuilder = Object.create(PathBuilder);
-    testPathBuilder.init(testDrafter)
+    // and then (theoretically) this is all you need to run!
+    testPathBuilder = Object.create(PathBuilder).run(testDrafter);
     
-    testPathBuilder.createAll();
     
+    
+    //// this is just debugging code
     //console.log("All cycles: ");
     console.log(testPathBuilder.allCycles);
     
-    testStraightener = Object.create(Straightener)
-        .initAll(testPathBuilder.allCycles);
-    //testStraightener.init(mypath);
-    //testStraightener.findStraights();
-    
-    var longests = testStraightener.longests;
+    var longests = testPathBuilder.straightener.longests;
     console.log(longests);
     
     ////
