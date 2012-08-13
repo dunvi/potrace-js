@@ -55,8 +55,7 @@ PathBuilder = {
         var self = this;
         var image = self.image;
         
-        pushPath = Object.create(Path);
-        pushPath.init(self.currentCycle)
+        var pushPath = Object.create(Path).init(self.currentCycle);
         
         var insides = image.gather(pushPath);
         // if legal given turdsize, push the path onto all cycles

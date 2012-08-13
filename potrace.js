@@ -23,31 +23,40 @@ testImage.addEventListener('click', function() {
     //console.log("All cycles: ");
     console.log(testPathBuilder.allCycles);
     
-    var mypath = testPathBuilder.allCycles[0];
+    testStraightener = Object.create(Straightener)
+        .initAll(testPathBuilder.allCycles);
+    //testStraightener.init(mypath);
+    //testStraightener.findStraights();
     
-    testStraightener = Object.create(Straightener);
-    testStraightener.init(mypath);
-    testStraightener.findStraights();
-    
-    var longests = testStraightener.longest;
+    var longests = testStraightener.longests;
     console.log(longests);
+    
+    ////
     
     var tempCanvas = document.createElement('canvas');
     tempCanvas.width = testDrafter.width;
     tempCanvas.height = testDrafter.height;
     var tempContext = tempCanvas.getContext('2d')
     
-    var mystart, myend;
-    for (var i = 0; i < longests.length; i++) {
-        mystart = mypath.indexer(i);
-        myend = mypath.indexer(longests[i]);
-        tempContext.strokeStyle = 'rgb(' + i + ',' + '0' + ','
-                                  + '0' + ')';
-        tempContext.beginPath();
-        tempContext.moveTo(mystart.x, mystart.y);
-        tempContext.lineTo(myend.x, myend.y);
-        tempContext.stroke();
+    var mypath, mystart, myend;
+    
+    for (var j = 0; j < longests.length; j++) {
+        
+        mypath = testPathBuilder.allCycles[j];
+        
+        for (var i = 0; i < longests[j].length; i++) {
+            mystart = mypath.indexer(i);
+            myend = mypath.indexer(longests[j][i]);
+            tempContext.strokeStyle = 'rgb(' + i + ',' + '0' + ','
+                                      + '0' + ')';
+            tempContext.beginPath();
+            tempContext.moveTo(mystart.x, mystart.y);
+            tempContext.lineTo(myend.x, myend.y);
+            tempContext.stroke();
+        }
+    
     }
+    
     document.body.appendChild(tempCanvas);
     
 });

@@ -1,3 +1,11 @@
+/* The Straightener API:
+
+The straightener gets called from the PathBuilder
+
+var mystraighter = Object.create(Straightener).initAll(allCycles);
+
+*/
+
 // handles the straightening stuff
 Straightener = {
     
@@ -5,12 +13,26 @@ Straightener = {
     start: undefined, // path indexer object
     end: undefined, // path indexer object
     longest: new Array(),
+    longests: new Array(),
     
     init: function(path) {
         var self = this;
         
         self.longest.length = 0;
         self.path = path;
+        
+        return self.findStraights();
+    },
+    
+    // gets passed allcycles
+    initAll: function(allCycles) {
+        var self = this;
+        
+        for (var i = 0; i < allCycles.length; i++) {
+            self.init(allCycles[i]);
+            self.longests.push(new Int8Array(self.longest));
+            console.log("Straightened a path!");
+        }
         
         return self;
     },
