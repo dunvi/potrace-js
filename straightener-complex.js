@@ -53,8 +53,8 @@ StraightenerComplex = {
         
         current = Object.create(Vector).init(self.start, self.end);
         
-        if (self.cross(constraintA, current) < 0) return true;
-        if (self.cross(constraintB, current) > 0) return true;
+        if (self.cross(constraintA, current) < 0
+           || self.cross(constraintB, current) > 0) return true;
         return false;
     },
     
@@ -111,13 +111,15 @@ StraightenerComplex = {
             while (true) {
                 self.end = path.indexer(self.start.i + k);
                 
-                if      (self.start.i === path.length-1) ;//console.log("hit1");
-                else if (self.cyclic(self.end.i, self.start.i, self.longest[path.mod(i+1)])) {
-                    //console.log("hit2");
+                // feel free to tell me what this check is for <.<
+                if (self.start.i < path.length-1
+                   && self.cyclic(self.end.i,
+                                  self.start.i, 
+                                  self.longest[path.mod(i+1)])) {
                     break;
                 }
                 
-                // first check directions
+                // then check directions
                 dir = path.getDir(self.end.i);
                 
                 if      (dir === Direction.north) dirs[0] = 1;
@@ -126,21 +128,25 @@ StraightenerComplex = {
                 else if (dir === Direction.west ) dirs[3] = 1;
                 
                 if (!isNaN(dirs[0] + dirs[1] + dirs[2] + dirs[3])) {
-                    //console.log("hit3");
                     break;
                 }
                 
-                //otherwise check constraints
+                // check constraints
                 if (self.constraintCheck()) {
-                    //console.log("hit4");
                     break;
                 }
                 
-                self.longest[i] = self.end.i;
+                // you made it!
+                // update constraints
                 self.setConstraints();
+                self.longest[i] = self.end.i;
                 k++;
             }
         }
+        
+        // there's some extra stuff that happens in the original
+        // implementation (constraint.cL#92).
+        // see if you can figure out why... later
         
         return self;
     },

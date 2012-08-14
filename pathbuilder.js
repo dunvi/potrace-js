@@ -5,6 +5,8 @@ PathBuilder = {
     allCycles: new Array(),
     straightener: Object.create(Straightener),
     
+    SANE: 500,
+    
     // should take in at least the image
     // by image I mean a Bitmap... I think...
     run: function(image) {
@@ -111,7 +113,7 @@ PathBuilder = {
         
         var sanitycheck = 0;
         
-        while (sanitycheck < 500) {
+        while (sanitycheck < self.SANE) {
             sanitycheck++;
             
             if (image.considerLeftTurn(consider, direction)) {
@@ -144,7 +146,7 @@ PathBuilder = {
         
         var sanitycheck = 0;
         
-        while (sanitycheck < 500) {
+        while (sanitycheck < self.SANE) {
             sanitycheck++;
             
             if (image.considerRightTurn(consider, direction)) {

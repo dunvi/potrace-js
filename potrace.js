@@ -23,9 +23,15 @@ testImage.addEventListener('click', function() {
     
     
     
+    testPolygon = Object.create(Polygon).init(testPathBuilder.allCycles[1]);
+    console.log(testPolygon.sums);
+    
+    
+    
     //// this is just debugging code
     //console.log("All cycles: ");
-    console.log(testPathBuilder.allCycles);
+    console.log(testPathBuilder.allCycles[1].print());
+    console.log(testPathBuilder.straightener.longests);
     
     var longests = testPathBuilder.straightener.longests;
     
