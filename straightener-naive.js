@@ -7,7 +7,7 @@ var mystraighter = Object.create(Straightener).initAll(allCycles);
 */
 
 // handles the straightening stuff
-Straightener = {
+StraightenerNaive = {
     
     path: undefined,
     start: undefined, // path indexer object
@@ -112,6 +112,9 @@ Straightener = {
         }
         // at end, for each i, longest[i] should hold the index of path
         // for which i could be connected to and still considered straight
+        
+        console.log("naive: ");
+        console.log(JSON.stringify(self.longest));
         
         return self;
     },

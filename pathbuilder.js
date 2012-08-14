@@ -3,7 +3,8 @@ PathBuilder = {
     
     currentCycle: new Array(),
     allCycles: new Array(),
-    straightener: Object.create(Straightener),
+    straightenerComplex: Object.create(StraightenerComplex),
+    straightenerNaive: Object.create(StraightenerNaive),
     
     // should take in at least the image
     // by image I mean a Bitmap... I think...
@@ -17,7 +18,8 @@ PathBuilder = {
     straighten: function() {
         var self = this;
         
-        self.straightener.initAll(self.allCycles)
+        self.straightenerComplex.initAll(self.allCycles);
+        self.straightenerNaive.initAll(self.allCycles);
         return self;
     },
     

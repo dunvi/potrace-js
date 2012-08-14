@@ -7,16 +7,17 @@ var mystraighter = Object.create(Straightener).initAll(allCycles);
 */
 
 // handles the straightening stuff
-Straightener = {
+StraightenerComplex = {
     
     path: undefined,
     start: undefined, // coordinate object
-    end: undefined // coordinate objects
+    end: undefined, // coordinate objects
     longest: new Array(),
+    longests: new Array(),
     // A and B actually stand for above and below :P
     // although above and below are technically meaningless lol
-    constraintA: Object.create(Vector), // note these are uninitialized!
-    constraintB: Object.create(Vector), // initialized inside the main loop
+    constraintA: undefined, // note these are uninitialized!
+    constraintB: undefined, // initialized inside the main loop
     
     offset: Object.create(Vector).init0(),
     
@@ -26,11 +27,22 @@ Straightener = {
         self.longest.length = 0;
         self.path = path;
         
-        return self;
+        return self.findStraights();
     },
     
     initAll: function(allCycles) {
-    
+        var self = this;
+        
+        constraintA = Object.create(Vector);
+        constraintB = Object.create(Vector);
+        
+        for (var i = 0; i < allCycles.length; i++) {
+            self.init(allCycles[i]);
+            self.longests.push(new Int8Array(self.longest));
+            console.log("Straightened a path!");
+        }
+        
+        return self;
     },
     
     // constraintCheck returns true if the end coord object
@@ -86,19 +98,26 @@ Straightener = {
         var self = this;
         var path = self.path;
         
-        var kpivs = new Array();
-        
         var dir, k;
         var dirs = new Array();
         
-        for (var i = path.length - 1; i !== 0; i--) {
-            constraintA.init0();
-            constraintB.init0();
+        // if you use i you're safe. if you use i+anything you must reindex
+        for (var i = path.length - 1; i >= 0; i--) {
+            self.start = path.indexer(i);
             dirs.length = 0;
             
-            k = 1;
+            constraintA.init0();
+            constraintB.init0();
+            
+            k = 2;
             while (true) {
                 self.end = path.indexer(self.start.i + k);
+                
+                if      (self.start.i === path.length-1) ;//console.log("hit1");
+                else if (self.cyclic(self.end.i, self.start.i, self.longest[path.mod(i+1)])) {
+                    //console.log("hit2");
+                    break;
+                }
                 
                 // first check directions
                 dir = path.getDir(self.end.i);
@@ -108,12 +127,18 @@ Straightener = {
                 else if (dir === Direction.east ) dirs[2] = 1;
                 else if (dir === Direction.west ) dirs[3] = 1;
                 
-                if (!isNaN(dirs[0] + dirs[1] + dirs[2] + dirs[3])) break;
+                if (!isNaN(dirs[0] + dirs[1] + dirs[2] + dirs[3])) {
+                    //console.log("hit3");
+                    break;
+                }
                 
                 //otherwise check constraints
-                if (k > 2) if (self.constraintCheck()) break;
+                if (self.constraintCheck()) {
+                    //console.log("hit4");
+                    break;
+                }
                 
-                kpivs[i] = self.end.i;
+                self.longest[i] = self.end.i;
                 self.setConstraints();
                 k++;
             }
@@ -122,14 +147,34 @@ Straightener = {
         // hack until we know why there are kpivs :P
         // start at line 198 here (on potrace-python)
         // try to pretend you know what's going on :P
+        /*
         var j;
-        longest[path.length-1] = j;
-        
-        for (var i = path.length - 1; i !== 0; i--) {
-            longest[i] = kpivs[i];
+        j = kpivs[path.length-1];
+        for (var i = path.length - 1; i >= 0; i--) {
+            if (self.cyclic(path.indexer(i+1).i, kpivs[i], j)) j = kpivs[i];
+            self.longest[i] = kpivs[i];
         }
         
+        console.log(JSON.stringify(self.longest));
+        
+        var i = path.length - 1;
+        while (self.cyclic(path.indexer(i+1).i, j, self.longest[i])) {
+            i--;
+            self.longest[i] = j;
+        }
+        */
+        console.log("complex: ");
+        console.log(JSON.stringify(self.longest));
+        
         return self;
+    },
+    
+    // returns true if points are in order on a circle,
+    // a <= b < c < a
+    // takes in just the indices
+    cyclic: function(i, j, k) {
+        if (i <= k) return (i <= j && j < k);
+        else return (i <= j || j < k);
     },
     
     cross: function( v1, v2 ) {
