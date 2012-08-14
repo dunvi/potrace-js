@@ -144,28 +144,6 @@ StraightenerComplex = {
             }
         }
         
-        // hack until we know why there are kpivs :P
-        // start at line 198 here (on potrace-python)
-        // try to pretend you know what's going on :P
-        /*
-        var j;
-        j = kpivs[path.length-1];
-        for (var i = path.length - 1; i >= 0; i--) {
-            if (self.cyclic(path.indexer(i+1).i, kpivs[i], j)) j = kpivs[i];
-            self.longest[i] = kpivs[i];
-        }
-        
-        console.log(JSON.stringify(self.longest));
-        
-        var i = path.length - 1;
-        while (self.cyclic(path.indexer(i+1).i, j, self.longest[i])) {
-            i--;
-            self.longest[i] = j;
-        }
-        */
-        console.log("complex: ");
-        console.log(JSON.stringify(self.longest));
-        
         return self;
     },
     

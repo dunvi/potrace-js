@@ -54,8 +54,10 @@ of arrays holding the longest path segments possible from each vertex,
 instead of the entire straightener object.
 
 Of the two implementations, the naive one works in O(n^3) time but is
-fully operational. The complex one is unfinished and untested, but
-should eventually use an algorithm that is only O(n^2).
+fully operational. The complex one is operational but also outputs
+slightly questionable results, plus the results are just a bit
+questionable. Between this and the timing notes below, the naive
+implementation will be used until further notice.
 
 There is an additional "helper object" called Direction. It contains
 the 4 coordinate directions north, south, east, and west, and (more

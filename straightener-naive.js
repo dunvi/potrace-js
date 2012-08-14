@@ -113,9 +113,6 @@ StraightenerNaive = {
         // at end, for each i, longest[i] should hold the index of path
         // for which i could be connected to and still considered straight
         
-        console.log("naive: ");
-        console.log(JSON.stringify(self.longest));
-        
         return self;
     },
     
