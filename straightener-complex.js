@@ -65,30 +65,28 @@ StraightenerComplex = {
         
         if (Math.abs(current.x) <= 1 && Math.abs(current.y) <= 1) return self;
         
-        var offset = self.offset;
-        
         // check against constraintA
-        offset.x = current.x 
+        self.offset.x = current.x 
                    + (current.y >= 0 && (current.x < 0 || current.y > 0) 
                      ? 1 : -1);
-        offset.y = current.y
+        self.offset.y = current.y
                    + (current.x <= 0 && (current.x < 0 || current.y > 0)
                      ? 1 : -1);
-        if (self.cross(constraintA, offset) >= 0) {
-            constraintA.x = offset.x;
-            constraintA.y = offset.y;
+        if (self.cross(constraintA, self.offset) >= 0) {
+            constraintA.x = self.offset.x;
+            constraintA.y = self.offset.y;
         }
         
         // check against constraintB
-        offset.x = current.x 
+        self.offset.x = current.x 
                    + (current.y <= 0 && (current.x > 0 || current.y < 0) 
                      ? 1 : -1);
-        offset.y = current.y
+        self.offset.y = current.y
                    + (current.x >= 0 && (current.x > 0 || current.y < 0)
                      ? 1 : -1);
-        if (self.cross(constraintB, offset) >= 0) {
-            constraintB.x = offset.x;
-            constraintB.y = offset.y;
+        if (self.cross(constraintB, self.offset) >= 0) {
+            constraintB.x = self.offset.x;
+            constraintB.y = self.offset.y;
         }
         
         return self;
