@@ -12,12 +12,14 @@ testImage.addEventListener('click', function() {
     context.fillRect(25, 55, 50, 20);
     context.fillRect(40, 25, 05, 30);
     
+    console.time('TestTime');
     // you just convert the image to a drafter object...
     testDrafter = Object.create(Drafter);
     testDrafter.init(testImage, 0);
     
     // and then (theoretically) this is all you need to run!
     testPathBuilder = Object.create(PathBuilder).run(testDrafter);
+    console.timeEnd('TestTime');
     
     
     
@@ -25,10 +27,7 @@ testImage.addEventListener('click', function() {
     //console.log("All cycles: ");
     console.log(testPathBuilder.allCycles);
     
-    var longestsComplex = testPathBuilder.straightenerComplex.longests;
-    var longestsNaive = testPathBuilder.straightenerNaive.longests;
-    console.log(longestsComplex);
-    console.log(longestsNaive);
+    var longests = testPathBuilder.straightener.longests;
     
     ////
     
@@ -39,13 +38,13 @@ testImage.addEventListener('click', function() {
     
     var mypath, mystart, myend;
     
-    for (var j = 0; j < longestsComplex.length; j++) {
+    for (var j = 0; j < longests.length; j++) {
         
         mypath = testPathBuilder.allCycles[j];
         
-        for (var i = 0; i < longestsComplex[j].length; i++) {
+        for (var i = 0; i < longests[j].length; i++) {
             mystart = mypath.indexer(i);
-            myend = mypath.indexer(longestsComplex[j][i]);
+            myend = mypath.indexer(longests[j][i]);
             tempContext.strokeStyle = 'rgb(' + i + ',' + '0' + ','
                                       + '0' + ')';
             tempContext.beginPath();
@@ -57,31 +56,6 @@ testImage.addEventListener('click', function() {
     }
     
     document.body.appendChild(tempCanvas);
-    
-    var tempCanvas2 = document.createElement('canvas');
-    tempCanvas2.width = testDrafter.width;
-    tempCanvas2.height = testDrafter.height;
-    var tempContext2 = tempCanvas2.getContext('2d')
-    
-    
-    for (var j = 0; j < longestsNaive.length; j++) {
-        
-        mypath = testPathBuilder.allCycles[j];
-        
-        for (var i = 0; i < longestsNaive[j].length; i++) {
-            mystart = mypath.indexer(i);
-            myend = mypath.indexer(longestsNaive[j][i]);
-            tempContext2.strokeStyle = 'rgb(' + i + ',' + '0' + ','
-                                       + '0' + ')';
-            tempContext2.beginPath();
-            tempContext2.moveTo(mystart.x, mystart.y);
-            tempContext2.lineTo(myend.x, myend.y);
-            tempContext2.stroke();
-        }
-    
-    }
-    
-    document.body.appendChild(tempCanvas2);
     
 });
 

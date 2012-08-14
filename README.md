@@ -78,3 +78,17 @@ straightness is a detail that uses completed paths, not something
 related to paths. The underlying question here is whether paths refers
 strictly to coordinate-based paths, or if vector paths are the real
 meaning in use here!
+
+
+
+7/14/2012: some timing runs:
+    371,367,369,371,355,357,358,352,332,364ms with straightener-naive
+        avg: 359.6
+    412,380,420,401,385,383,393,419,374,369ms with straightener-complex
+        avg: 393.6
+    
+    some possible explanations:
+        lack of optimization yet implemented in straightener-complex
+        incomplete or incorrect implementation
+        greater startup costs require a larger dataset to reap the 
+          benefits of the O(n^2) alg over the O(n^3)
