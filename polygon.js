@@ -65,5 +65,10 @@ Polygon = {
             
         return self;
     },
-
+    
+    // assumes the sums matrix is already filled
+    penalty: function() {
+        
+    },
+    
 };

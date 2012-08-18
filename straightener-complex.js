@@ -79,12 +79,12 @@ StraightenerComplex = {
         
         // check against constraintB
         self.offset.x = current.x 
-                   + (current.y <= 0 && (current.x > 0 || current.y < 0) 
+                   + ((current.y <= 0 && (current.x > 0 || current.y < 0))
                      ? 1 : -1);
         self.offset.y = current.y
-                   + (current.x >= 0 && (current.x > 0 || current.y < 0)
+                   + ((current.x >= 0 && (current.x > 0 || current.y < 0))
                      ? 1 : -1);
-        if (self.cross(constraintB, self.offset) >= 0) {
+        if (self.cross(constraintB, self.offset) <= 0) {
             constraintB.x = self.offset.x;
             constraintB.y = self.offset.y;
         }
@@ -107,15 +107,14 @@ StraightenerComplex = {
             constraintA.init0();
             constraintB.init0();
             
-            k = 2;
+            self.end = self.start.next();
             while (true) {
-                self.end = path.indexer(self.start.i + k);
-                
+                self.end = self.end.next();
                 // feel free to tell me what this check is for <.<
                 if (self.start.i < path.length-1
                    && self.cyclic(self.end.i,
                                   self.start.i, 
-                                  self.longest[path.mod(i+1)])) {
+                                  self.longest[self.start.next().i])) {
                     break;
                 }
                 
@@ -139,9 +138,8 @@ StraightenerComplex = {
                 // you made it!
                 // update constraints
                 self.setConstraints();
-                self.longest[i] = self.end.i;
-                k++;
             }
+            self.longest[i] = self.end.prev().i;
         }
         
         // there's some extra stuff that happens in the original

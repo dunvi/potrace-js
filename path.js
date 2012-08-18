@@ -30,6 +30,8 @@ Path = {
             x: self.cycle[index*2],
             y: self.cycle[index*2+1],
             i: index,
+            next: function () { return self.indexer(self.mod(this.i+1)); },
+            prev: function () { return self.indexer(self.mod(this.i-1)); },
             print: function () { return "(" + this.x + "," + this.y + ")"; },
         };
     },

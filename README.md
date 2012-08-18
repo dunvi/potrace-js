@@ -33,13 +33,12 @@ direction, for a theoretically infinite number of iterations), and
 contains the methods necessary to do so. Note that while a path is
 aware of its 2 dimensional nature, and therefore indexes to paired x,y 
 coordinates, it does not have any knowledge of the image to which
-these coordinates relate.
+these coordinates relate. Indexer objects have two methods, called prev
+and next, which return the previous and next indexer objects. Handy -
+helps avoid that ugly path.indexer(path.mod(self.start.i+1)) math.
 
-Each of these two objects has a direct descendent object which is aware
-of the relationship between an image and its paths.
-
-The bitmap's descendent is called Drafter. A drafter is aware of the
-purpose of a path, but never generates them, only uses them as
+The bitmap has a descendent called Drafter. A drafter is aware of the
+purpose of a path, but never generates one, only uses them as
 parameters for operations that alter the image.
 
 The "highest" level class is called the PathBuilder. The pathbuilder is
@@ -54,10 +53,9 @@ of arrays holding the longest path segments possible from each vertex,
 instead of the entire straightener object.
 
 Of the two implementations, the naive one works in O(n^3) time but is
-fully operational. The complex one is operational but also outputs
-slightly questionable results, plus the results are just a bit
-questionable. Between this and the timing notes below, the naive
-implementation will be used until further notice.
+fully operational. The complex one is operational, and now outputs
+reasonable results. However, because of the timing notes below, the
+naive implementation will be used until further notice.
 
 There is an additional "helper object" called Direction. It contains
 the 4 coordinate directions north, south, east, and west, and (more
@@ -66,7 +64,7 @@ importantly) handles the meaning of "turn left" and "turn right".
 
 -----------------------------------------------------------------------
 
-Some slightly confusing things about the current implementations: 
+A slightly confusing thing about the current implementations: 
 deciding whether to make a certain type of turn is a member function of
 the Drafter object because it requires knowledge of the image details. 
 Deciding which turn to try in the first place (called the turn policy) 
@@ -94,3 +92,7 @@ meaning in use here!
         incomplete or incorrect implementation
         greater startup costs require a larger dataset to reap the 
           benefits of the O(n^2) alg over the O(n^3)
+
+
+-----------------------------------------------------------------------
+
